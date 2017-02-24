@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_edit_actual_item"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.jonathon.agilebudgeting.EditActualExpenseActivity">
+
+    <TextView
+        android:text="@string/actualExpensePeriodLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="10dp"
+        android:id="@+id/actualExpensePeriodLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/actualExpensePeriodLabel"
+        android:layout_toRightOf="@id/actualExpensePeriodLabel"
+        android:layout_toEndOf="@id/actualExpensePeriodLabel"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
+        android:id="@+id/actualExpensePeriodDisplay" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/actualExpensePeriodLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/actualExpenseDateLabel"
+        android:layout_margin="10dp"
+        android:id="@+id/actualExpenseDateLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/actualExpenseDateLabel"
+        android:layout_toRightOf="@id/actualExpenseDateLabel"
+        android:layout_toEndOf="@id/actualExpenseDateLabel"
+        android:layout_margin="10dp"
+        android:inputType="date"
+        android:hint="@string/actualExpenseDateHint"
+        android:id="@+id/actualExpenseDateField" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/actualExpenseDateLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/actualExpenseDescriptionLabel"
+        android:layout_margin="10dp"
+        android:id="@+id/actualExpenseDescriptionLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/actualExpenseDescriptionLabel"
+        android:layout_toRightOf="@id/actualExpenseDescriptionLabel"
+        android:layout_toEndOf="@id/actualExpenseDescriptionLabel"
+        android:layout_margin="10dp"
+        android:inputType="textAutoComplete"
+        android:hint="@string/actualExpenseDescriptionHint"
+        android:id="@+id/actualExpenseDescriptionField" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/actualExpenseDescriptionLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/actualExpenseAmountLabel"
+        android:layout_margin="10dp"
+        android:id="@+id/actualExpenseAmountLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/actualExpenseAmountLabel"
+        android:layout_toRightOf="@id/actualExpenseAmountLabel"
+        android:layout_toEndOf="@id/actualExpenseAmountLabel"
+        android:layout_margin="10dp"
+        android:inputType="numberDecimal"
+        android:hint="@string/actualExpenseAmountHint"
+        android:id="@+id/actualExpenseAmountField" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/actualExpenseAmountLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/actualExpenseAccountLabel"
+        android:layout_margin="10dp"
+        android:id="@+id/actualExpenseAccountLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/actualExpenseAccountLabel"
+        android:layout_toRightOf="@id/actualExpenseAccountLabel"
+        android:layout_toEndOf="@id/actualExpenseAccountLabel"
+        android:layout_margin="10dp"
+        android:inputType="textAutoComplete"
+        android:hint="@string/actualExpenseAccountHint"
+        android:id="@+id/actualExpenseAccountField" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        android:layout_below="@id/actualExpenseAccountLabel"
+        android:text="@string/actualExpenseMatchButton"
+        android:id="@+id/actualExpenseMatchButton"
+        android:onClick="findMatchingPlannedExpenseForItem" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        android:layout_below="@id/actualExpenseMatchButton"
+        android:text="@string/actualExpenseUnplannedButton"
+        android:id="@+id/actualExpenseUnplannedButton"
+        android:onClick="saveUnplannedActualExpense" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        android:layout_below="@id/actualExpenseUnplannedButton"
+        android:text="@string/actualExpenseClearButton"
+        android:id="@+id/actualExpenseClearButton"
+        android:onClick="clearFields" />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        android:layout_below="@id/actualExpenseClearButton"
+        android:text="@string/actualExpenseBackButton"
+        android:id="@+id/actualExpenseBackButton"
+        android:onClick="backToPlan" />
+
+</RelativeLayout>

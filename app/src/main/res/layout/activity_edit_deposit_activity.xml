@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_edit_deposit_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.jonathon.agilebudgeting.EditDepositActivity">
+
+    <TextView
+        android:text="@string/depositPeriodLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="10dp"
+        android:id="@+id/depositPeriodLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/depositPeriodLabel"
+        android:layout_toRightOf="@id/depositPeriodLabel"
+        android:layout_toEndOf="@id/depositPeriodLabel"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
+        android:id="@+id/depositPeriodDisplay" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/depositPeriodLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/depositDateLabel"
+        android:layout_margin="10dp"
+        android:id="@+id/depositDateLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/depositDateLabel"
+        android:layout_toRightOf="@id/depositDateLabel"
+        android:layout_toEndOf="@id/depositDateLabel"
+        android:layout_margin="10dp"
+        android:inputType="date"
+        android:hint="@string/depositDateHint"
+        android:id="@+id/depositDateField" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/depositDateLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/depositDescriptionLabel"
+        android:layout_margin="10dp"
+        android:id="@+id/depositDescriptionLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/depositDescriptionLabel"
+        android:layout_toRightOf="@id/depositDescriptionLabel"
+        android:layout_toEndOf="@id/depositDescriptionLabel"
+        android:layout_margin="10dp"
+        android:inputType="textAutoComplete"
+        android:hint="@string/depositDescriptionHint"
+        android:id="@+id/depositDescriptionField" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/depositDescriptionLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/depositAmountLabel"
+        android:layout_margin="10dp"
+        android:id="@+id/depositAmountLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/depositAmountLabel"
+        android:layout_toRightOf="@id/depositAmountLabel"
+        android:layout_toEndOf="@id/depositAmountLabel"
+        android:layout_margin="10dp"
+        android:inputType="numberDecimal"
+        android:hint="@string/depositAmountHint"
+        android:id="@+id/depositAmountField" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/depositAmountLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/depositAccountLabel"
+        android:layout_margin="10dp"
+        android:id="@+id/depositAccountLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/depositAccountLabel"
+        android:layout_toRightOf="@id/depositAccountLabel"
+        android:layout_toEndOf="@id/depositAccountLabel"
+        android:layout_margin="10dp"
+        android:inputType="textAutoComplete"
+        android:hint="@string/depositAccountHint"
+        android:id="@+id/depositAccountField" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        android:layout_below="@id/depositAccountLabel"
+        android:text="@string/depositSaveButton"
+        android:id="@+id/depositSaveButton"
+        android:onClick="saveDeposit" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        android:layout_below="@id/depositSaveButton"
+        android:text="@string/depositClearButton"
+        android:id="@+id/depositClearButton"
+        android:onClick="clearFields" />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        android:layout_below="@id/depositClearButton"
+        android:text="@string/depositBackButton"
+        android:id="@+id/depositBackButton"
+        android:onClick="backToPlan" />
+
+</RelativeLayout>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_edit_planned_expense"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.jonathon.agilebudgeting.EditPlannedExpenseActivity">
+
+    <TextView
+        android:text="@string/plannedExpensePeriodLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="10dp"
+        android:id="@+id/plannedExpensePeriodLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/plannedExpensePeriodLabel"
+        android:layout_toRightOf="@+id/plannedExpensePeriodLabel"
+        android:layout_toEndOf="@id/plannedExpensePeriodLabel"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
+        android:id="@+id/plannedExpensePeriodDisplay" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/plannedExpensePeriodLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/plannedExpenseDescriptionLabel"
+        android:layout_margin="10dp"
+        android:id="@+id/plannedExpenseDescriptionLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/plannedExpenseDescriptionLabel"
+        android:layout_toRightOf="@id/plannedExpenseDescriptionLabel"
+        android:layout_toEndOf="@id/plannedExpenseDescriptionLabel"
+        android:layout_margin="10dp"
+        android:inputType="textAutoComplete"
+        android:hint="@string/plannedExpenseDescriptionHint"
+        android:id="@+id/plannedExpenseDescriptionField" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/plannedExpenseDescriptionLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/plannedExpenseAmountLabel"
+        android:layout_margin="10dp"
+        android:id="@+id/plannedExpenseAmountLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/plannedExpenseAmountLabel"
+        android:layout_toRightOf="@id/plannedExpenseAmountLabel"
+        android:layout_toEndOf="@id/plannedExpenseAmountLabel"
+        android:layout_margin="10dp"
+        android:inputType="numberDecimal"
+        android:hint="@string/plannedExpenseAmountHint"
+        android:id="@+id/plannedExpenseAmountField" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/plannedExpenseAmountLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/plannedExpenseAccountLabel"
+        android:layout_margin="10dp"
+        android:id="@+id/plannedExpenseAccountLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/plannedExpenseAccountLabel"
+        android:layout_toRightOf="@id/plannedExpenseAccountLabel"
+        android:layout_toEndOf="@id/plannedExpenseAccountLabel"
+        android:layout_margin="10dp"
+        android:inputType="textAutoComplete"
+        android:hint="@string/plannedExpenseAccountHint"
+        android:id="@+id/plannedExpenseAccountField" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        android:layout_below="@id/plannedExpenseAccountLabel"
+        android:text="@string/plannedExpenseSaveButton"
+        android:id="@+id/plannedExpenseSaveButton"
+        android:onClick="saveExpense" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        android:layout_below="@id/plannedExpenseSaveButton"
+        android:text="@string/plannedExpenseClearButton"
+        android:id="@+id/plannedExpenseClearButton"
+        android:onClick="clearFields" />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        android:layout_below="@id/plannedExpenseClearButton"
+        android:text="@string/plannedExpenseBackButton"
+        android:id="@+id/plannedExpenseBackButton"
+        android:onClick="backToPlan" />
+
+</RelativeLayout>
