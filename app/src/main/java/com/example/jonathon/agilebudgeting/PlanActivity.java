@@ -178,6 +178,9 @@ public class PlanActivity extends AppCompatActivity {
     private void disableActuals() {
         Button addActualsButton = (Button) findViewById(R.id.addActualExpenseButton);
         addActualsButton.setEnabled(false);
+
+        Button closeActualsButton = (Button) findViewById(R.id.closeActualsButton);
+        closeActualsButton.setEnabled(false);
     }
 
     private void disablePlanning() {

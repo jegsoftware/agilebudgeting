@@ -57,7 +57,6 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
 
         LinearLayout listView = (LinearLayout) findViewById(R.id.itemList);
         Iterator<? extends Item> iter = items.iterator();
-        int editButtonId = 0;
         while (iter.hasNext())
         {
             LinearLayout itemView = new LinearLayout(listView.getContext());
