@@ -39,7 +39,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     protected void populateList() {
-        Plan plan = Plan.createPlan(getApplicationContext(), planId);
+        Plan plan = Plan.createPlan(planId);
         ArrayList<? extends Item> items;
         if ("Deposit".equals(listType)){
             items = plan.getDeposits();

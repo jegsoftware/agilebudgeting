@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity implements DatePicker.OnDate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DbHelperSingleton.getInstance().init(getApplicationContext());
+
         setContentView(R.layout.activity_main);
         DatePicker picker = (DatePicker) findViewById(R.id.planDatePicker);
         GregorianCalendar today = new GregorianCalendar();
@@ -33,5 +36,10 @@ public class MainActivity extends AppCompatActivity implements DatePicker.OnDate
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_DATE", planDate);
         startActivity(intent);
 
+    }
+
+    protected void onDestroy() {
+        DbHelperSingleton.getInstance().init(null);
+        super.onDestroy();
     }
 }

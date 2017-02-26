@@ -23,7 +23,6 @@ public class Plan {
     private ArrayList<PlannedItem> plannedItems;
     private ArrayList<Deposit> deposits;
     private long planId;
-    private AgileBudgetingDbHelper dbHelper;
     private ArrayList<ActualItem> actualItems;
 
     private Plan()
@@ -36,16 +35,15 @@ public class Plan {
         deposits = new ArrayList<Deposit>();
         actualItems = new ArrayList<ActualItem>();
         planId = -1;
-        dbHelper = null;
     }
 
-    public static Plan createPlan(Context context, Calendar planDate)
+    public static Plan createPlan(Calendar planDate)
     {
         PlanningPeriod planPeriod = new PlanningPeriod(planDate);
 
         Plan newPlan = new Plan();
-        newPlan.dbHelper = new AgileBudgetingDbHelper(context);
-        SQLiteDatabase db = newPlan.dbHelper.getReadableDatabase();
+        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
                 AgileBudgetingContract.Plans._ID,
@@ -89,7 +87,7 @@ public class Plan {
             newPlan.planningStatus = PlanStatus.valueOf(planningStatusString);
             newPlan.actualsStatus = PlanStatus.valueOf(actualsStatusString);
             newPlan.period = new PlanningPeriod(perNum, perYear);
-            newPlan.populateItems(context);
+            newPlan.populateItems();
         }
         cursor.close();
         db.close();
@@ -98,13 +96,13 @@ public class Plan {
 
     }
 
-    public static Plan createPlan(Context context, long planId)
+    public static Plan createPlan(long planId)
     {
         Plan newPlan = new Plan();
         newPlan.planId = planId;
 
-        newPlan.dbHelper = new AgileBudgetingDbHelper(context);
-        SQLiteDatabase db = newPlan.dbHelper.getReadableDatabase();
+        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
                 AgileBudgetingContract.Plans.COLUMN_NAME_PLANNING_STATUS,
@@ -138,7 +136,7 @@ public class Plan {
         newPlan.planningStatus = PlanStatus.valueOf(planningStatusString);
         newPlan.actualsStatus = PlanStatus.valueOf(actualsStatusString);
         newPlan.period = new PlanningPeriod(perNum, perYear);
-        newPlan.populateItems(context);
+        newPlan.populateItems();
         return newPlan;
     }
 
@@ -237,7 +235,8 @@ public class Plan {
 
     public double getNetActualAmount() { return getTotalPlannedExpenses() - getTotalActualExpenses(); }
 
-    private void populateItems(Context context) {
+    private void populateItems() {
+        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -266,15 +265,15 @@ public class Plan {
             long itemId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Items._ID));
 
             if ("Deposit".equals(type)) {
-                Deposit deposit = Deposit.createDeposit(context, itemId);
+                Deposit deposit = Deposit.createDeposit(itemId);
                 addDeposit(deposit);
             }
             else if ("PlannedItem".equals(type)) {
-                PlannedItem plannedItem = PlannedItem.createItem(context, itemId);
+                PlannedItem plannedItem = PlannedItem.createItem(itemId);
                 addPlannedItem(plannedItem);
             }
             else if ("ActualItem".equals(type)) {
-                ActualItem actualItem = ActualItem.createActualItem(context, itemId);
+                ActualItem actualItem = ActualItem.createActualItem(itemId);
                 addActualItem(actualItem);
             }
 
@@ -286,6 +285,7 @@ public class Plan {
     }
 
     public long persist() {
+        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(AgileBudgetingContract.Plans.COLUMN_NAME_PERIODNUM, period.getPeriodNumber());

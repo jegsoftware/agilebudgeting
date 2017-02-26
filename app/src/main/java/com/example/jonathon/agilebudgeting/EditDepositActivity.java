@@ -26,7 +26,7 @@ public class EditDepositActivity extends AppCompatActivity{
         String action = intent.getAction();
 
         long planId = intent.getLongExtra("com.example.jonathon.agilebudgeting.PLAN_ID", -1);
-        plan = Plan.createPlan(this, planId);
+        plan = Plan.createPlan(planId);
         if (action.equals(ACTION_MAIN)) {
             TextView depositPeriod = (TextView) findViewById(R.id.depositPeriodDisplay);
             depositPeriod.setText(plan.getPeriod().getPeriodStartDate());
@@ -34,7 +34,7 @@ public class EditDepositActivity extends AppCompatActivity{
         }
         else if (action.equals(ACTION_EDIT)) {
             long itemId = intent.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID", -1);
-            deposit = Deposit.createDeposit(getApplicationContext(), itemId);
+            deposit = Deposit.createDeposit(itemId);
             populateFields();
         }
 
@@ -99,7 +99,7 @@ public class EditDepositActivity extends AppCompatActivity{
             deposit.setAmount(amount);
             deposit.setAccount(acct);
         }
-        long depositId = deposit.persist(this);
+        long depositId = deposit.persist();
 
         Intent returnIntent = new Intent();
 

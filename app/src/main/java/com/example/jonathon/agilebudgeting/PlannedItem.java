@@ -36,8 +36,8 @@ public class PlannedItem extends Item {
         return newItem;
     }
 
-    public static PlannedItem createItem(Context context, long itemID) {
-        AgileBudgetingDbHelper dbHelper = new AgileBudgetingDbHelper(context);
+    public static PlannedItem createItem(long itemID) {
+        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -66,6 +66,7 @@ public class PlannedItem extends Item {
         String acct = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT));
         long planId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_PLANID));
 
+        cursor.close();
         db.close();
 
         PlannedItem newItem = new PlannedItem();
@@ -80,8 +81,8 @@ public class PlannedItem extends Item {
 
 
     @Override
-    public long persist(Context context) {
-        AgileBudgetingDbHelper dbHelper = new AgileBudgetingDbHelper(context);
+    public long persist() {
+        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_PLANID, planId);
@@ -105,10 +106,10 @@ public class PlannedItem extends Item {
         return itemId;
     }
 
-    public void addActualItem(Context context, ActualItem actualItem) {
+    public void addActualItem(ActualItem actualItem) {
         if ((null != actualItem) && !actualItems.contains(actualItem)) {
             actualItems.add(actualItem);
-            actualItem.addPlannedItem(context, this);
+            actualItem.addPlannedItem(this);
         }
     }
 }

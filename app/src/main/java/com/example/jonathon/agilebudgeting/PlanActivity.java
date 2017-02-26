@@ -31,12 +31,12 @@ public class PlanActivity extends AppCompatActivity {
         if (action.equals(ACTION_MAIN)) {
             GregorianCalendar selectedDate = (GregorianCalendar) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN_DATE");
 
-            plan = Plan.createPlan(getApplicationContext(), selectedDate);
+            plan = Plan.createPlan(selectedDate);
         }
         else
         {
             long planId = intent.getLongExtra("com.example.jonathon.agilebudgeting.PLAN_ID", -1);
-            plan = Plan.createPlan(getApplicationContext(), planId);
+            plan = Plan.createPlan(planId);
         }
 
         EditText planBeginDateField = (EditText) findViewById(R.id.periodBeginDate);
@@ -111,14 +111,14 @@ public class PlanActivity extends AppCompatActivity {
         if (requestCode == CREATE_PLANNED_EXPENSE) {
             if (resultCode == RESULT_OK) {
                 long expenseId = data.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID",-1);
-                plan.addPlannedItem(PlannedItem.createItem(this, expenseId));
+                plan.addPlannedItem(PlannedItem.createItem(expenseId));
                 updateTotals();
             }
         }
         else if (requestCode == CREATE_DEPOSIT) {
             if (resultCode == RESULT_OK) {
                 long depositId = data.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID",-1);
-                Deposit deposit = Deposit.createDeposit(this, depositId);
+                Deposit deposit = Deposit.createDeposit(depositId);
                 plan.addDeposit(deposit);
                 updateTotals();
             }
@@ -126,7 +126,7 @@ public class PlanActivity extends AppCompatActivity {
         else if (requestCode == CREATE_ACTUAL_EXPENSE) {
             if (resultCode == RESULT_OK) {
                 long expenseId = data.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID",-1);
-                plan.addActualItem(ActualItem.createActualItem(this, expenseId));
+                plan.addActualItem(ActualItem.createActualItem(expenseId));
                 updateTotals();
             }
         }

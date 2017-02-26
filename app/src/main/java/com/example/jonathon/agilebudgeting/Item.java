@@ -52,7 +52,7 @@ public abstract class Item {
         this.planId = planId;
     }
 
-    public abstract long persist(Context context);
+    public abstract long persist();
 
     public long getItemId() {
         return itemId;

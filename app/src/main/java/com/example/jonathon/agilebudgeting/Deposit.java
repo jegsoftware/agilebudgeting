@@ -35,10 +35,10 @@ public class Deposit extends Item {
 
     }
 
-    public static Deposit createDeposit(Context context, long itemID) {
+    public static Deposit createDeposit(long itemID) {
         Deposit newDeposit = new Deposit();
 
-        AgileBudgetingDbHelper dbHelper = new AgileBudgetingDbHelper(context);
+        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -69,6 +69,7 @@ public class Deposit extends Item {
         String acct = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT));
         long planId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_PLANID));
 
+        cursor.close();
         db.close();
 
         newDeposit.date = date;
@@ -92,8 +93,8 @@ public class Deposit extends Item {
 
 
     @Override
-    public long persist(Context context) {
-        AgileBudgetingDbHelper dbHelper = new AgileBudgetingDbHelper(context);
+    public long persist() {
+        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_PLANID, planId);

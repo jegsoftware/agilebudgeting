@@ -41,10 +41,10 @@ public class ActualItem extends Item {
 
     }
 
-    public static ActualItem createActualItem(Context context, long itemID) {
+    public static ActualItem createActualItem(long itemID) {
         ActualItem newActualItem = new ActualItem();
 
-        AgileBudgetingDbHelper dbHelper = new AgileBudgetingDbHelper(context);
+        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -82,7 +82,7 @@ public class ActualItem extends Item {
         newActualItem.account = acct;
         newActualItem.planId = planId;
         newActualItem.itemId = itemID;
-        populatePlannedItems(context, db, newActualItem);
+        populatePlannedItems(db, newActualItem);
 
         db.close();
 
@@ -90,7 +90,7 @@ public class ActualItem extends Item {
 
     }
 
-    private static void populatePlannedItems(Context context, SQLiteDatabase db, ActualItem item) {
+    private static void populatePlannedItems(SQLiteDatabase db, ActualItem item) {
         String[] projection = {
                 AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID
         };
@@ -111,7 +111,7 @@ public class ActualItem extends Item {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             long plannedItemId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID));
-            item.plannedItems.add(PlannedItem.createItem(context, plannedItemId));
+            item.plannedItems.add(PlannedItem.createItem(plannedItemId));
             cursor.moveToNext();
         }
         cursor.close();
@@ -126,8 +126,8 @@ public class ActualItem extends Item {
         this.date = date;
     }
 
-    public long persist(Context context) {
-        AgileBudgetingDbHelper dbHelper = new AgileBudgetingDbHelper(context);
+    public long persist() {
+        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_PLANID, planId);
@@ -150,11 +150,11 @@ public class ActualItem extends Item {
         return itemId;
     }
 
-    public void addPlannedItem(Context context, PlannedItem plannedItem) {
+    public void addPlannedItem(PlannedItem plannedItem) {
         if ((null != plannedItem) && !isMatchedTo(plannedItem)) {
             plannedItems.add(plannedItem);
-            plannedItem.addActualItem(context, this);
-            saveRelationship(context, plannedItem);
+            plannedItem.addActualItem(this);
+            saveRelationship(plannedItem);
         }
     }
 
@@ -168,8 +168,8 @@ public class ActualItem extends Item {
         return false;
     }
 
-    private void saveRelationship(Context context, PlannedItem plannedItem) {
-        AgileBudgetingDbHelper dbHelper = new AgileBudgetingDbHelper(context);
+    private void saveRelationship(PlannedItem plannedItem) {
+        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(AgileBudgetingContract.Match.COLUMN_NAME_ACTUAL_ID, itemId);

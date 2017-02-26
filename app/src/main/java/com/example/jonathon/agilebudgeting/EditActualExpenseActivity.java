@@ -26,14 +26,14 @@ public class EditActualExpenseActivity extends AppCompatActivity {
         String action = intent.getAction();
 
         long planId = intent.getLongExtra("com.example.jonathon.agilebudgeting.PLAN_ID", -1);
-        plan = Plan.createPlan(this, planId);
+        plan = Plan.createPlan(planId);
         if (action.equals(ACTION_MAIN)) {
             TextView actualExpensePeriod = (TextView) findViewById(R.id.actualExpensePeriodDisplay);
             actualExpensePeriod.setText(plan.getPeriod().getPeriodStartDate());
             item = null;
         } else if (action.equals(ACTION_EDIT)) {
             long itemId = intent.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID", -1);
-            item = ActualItem.createActualItem(getApplicationContext(), itemId);
+            item = ActualItem.createActualItem(itemId);
             populateFields();
         }
 
@@ -127,7 +127,7 @@ public class EditActualExpenseActivity extends AppCompatActivity {
             item.setAccount(acct);
         }
 
-        expenseID = item.persist(this);
+        expenseID = item.persist();
     }
 
     private void returnToCaller() {

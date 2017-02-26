@@ -29,10 +29,10 @@ public class MatchActualToPlan extends AppCompatActivity {
         long planID = intent.getLongExtra("com.example.jonathon.agilebudgeting.PLAN_ID", -1);
 
         Context context = getApplicationContext();
-        plan = Plan.createPlan(context, planID);
+        plan = Plan.createPlan(planID);
         period = plan.getPeriod();
 
-        actualItem = ActualItem.createActualItem(context, actualItemID);
+        actualItem = ActualItem.createActualItem(actualItemID);
 
         populateList();
 
@@ -78,9 +78,9 @@ public class MatchActualToPlan extends AppCompatActivity {
             if(checkBox.isChecked()) {
                 TextView itemIdText = (TextView) itemView.getChildAt(1);
                 long plannedItemId = Long.parseLong(itemIdText.getText().toString());
-                PlannedItem plannedItem = PlannedItem.createItem(context, plannedItemId);
+                PlannedItem plannedItem = PlannedItem.createItem(plannedItemId);
 
-                actualItem.addPlannedItem(context, plannedItem);
+                actualItem.addPlannedItem(plannedItem);
             }
         }
 
