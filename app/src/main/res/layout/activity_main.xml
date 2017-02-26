@@ -10,16 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.jonathon.agilebudgeting.MainActivity">
 
-    <Button
-        android:text="@string/planCreateButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="19dp"
-        android:id="@+id/createPlanButton"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="createPlan" />
-
     <TextView
         android:text="@string/selectPlanDatePrompt"
         android:layout_width="match_parent"
