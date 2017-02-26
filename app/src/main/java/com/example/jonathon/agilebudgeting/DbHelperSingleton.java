@@ -28,4 +28,6 @@ public class DbHelperSingleton {
     public AgileBudgetingDbHelper getDbHelper() {
         return dbHelper;
     }
+
+    private void setDbHelper(AgileBudgetingDbHelper dbHelper) { this.dbHelper = dbHelper; }
 }
