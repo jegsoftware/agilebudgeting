@@ -37,10 +37,14 @@ public class Plan {
         planId = -1;
     }
 
-    public static Plan createPlan(Calendar planDate)
-    {
+    public static Plan createPlan(Calendar planDate) {
         PlanningPeriod planPeriod = new PlanningPeriod(planDate);
 
+        return createPlan(planPeriod);
+    }
+
+    public static Plan createPlan(PlanningPeriod planPeriod)
+    {
         Plan newPlan = new Plan();
         AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -74,7 +78,7 @@ public class Plan {
         cursor.moveToFirst();
 
         if (cursor.isAfterLast()) {
-            newPlan.setPeriod(planDate);
+            newPlan.setPeriod(planPeriod);
         }
         else {
             long planId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Plans._ID));
