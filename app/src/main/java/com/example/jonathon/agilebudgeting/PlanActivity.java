@@ -29,9 +29,9 @@ public class PlanActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String action = intent.getAction();
         if (action.equals(ACTION_MAIN)) {
-            GregorianCalendar selectedDate = (GregorianCalendar) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN_DATE");
+            PlanningPeriod selectedPeriod = (PlanningPeriod) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN_PERIOD");
 
-            plan = Plan.createPlan(selectedDate, new DBPlanPersister());
+            plan = Plan.createPlan(selectedPeriod, new DBPlanPersister());
         } else {
             // we should never get here
             throw new IllegalStateException("Started plan activity with action other than ACTION_MAIN");

@@ -30,10 +30,11 @@ public class MainActivity extends AppCompatActivity implements DatePicker.OnDate
     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         GregorianCalendar planDate = new GregorianCalendar();
         planDate.set(year, monthOfYear, dayOfMonth);
+        PlanningPeriod period = new PlanningPeriod(planDate);
 
         Intent intent = new Intent(this, PlanActivity.class);
         intent.setAction(ACTION_MAIN);
-        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_DATE", planDate);
+        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_PERIOD", period);
         startActivity(intent);
 
     }

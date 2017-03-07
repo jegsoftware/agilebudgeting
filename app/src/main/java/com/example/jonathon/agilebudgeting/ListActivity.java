@@ -102,17 +102,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         intent.setAction(ACTION_MAIN);
         Plan plan = Plan.createPlan(planId);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat();
-        dateFormat.applyPattern("MM/dd/yyyy");
-        GregorianCalendar periodDate = new GregorianCalendar();
-        try {
-            Date dateObj = dateFormat.parse(plan.getPlanStartDate());
-            periodDate.setTime(dateObj);
-        }
-        catch (ParseException e) {
-        }
-
-        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_DATE", periodDate);
+        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_PERIOD", plan.getPeriod());
         startActivity(intent);
     }
 

@@ -1,5 +1,6 @@
 package com.example.jonathon.agilebudgeting;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,7 +10,7 @@ import java.util.GregorianCalendar;
  * Created by Jonathon on 1/7/2017.
  */
 
-class PlanningPeriod {
+class PlanningPeriod implements Serializable {
     private int periodNumber;
     private int periodYear;
 
@@ -72,6 +73,5 @@ class PlanningPeriod {
         curDateFormat.applyPattern("MM/dd/yyyy");
         return curDateFormat.format(startDate.getTime());
     }
-
 
 }
