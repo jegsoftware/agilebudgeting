@@ -15,7 +15,6 @@ import java.util.List;
 public class MatchActualToPlan extends AppCompatActivity {
 
     private Plan plan;
-    private PlanningPeriod period;
     private ActualItem actualItem;
 
     @Override
@@ -26,11 +25,7 @@ public class MatchActualToPlan extends AppCompatActivity {
         Intent intent = getIntent();
 
         long actualItemID = intent.getLongExtra("com.example.jonathon.agilebudgeting.ACTUAL_ITEM_ID", -1);
-        long planID = intent.getLongExtra("com.example.jonathon.agilebudgeting.PLAN_ID", -1);
-
-        Context context = getApplicationContext();
-        plan = Plan.createPlan(planID);
-        period = plan.getPeriod();
+        plan = (Plan) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN");
 
         actualItem = ActualItem.createActualItem(actualItemID);
 

@@ -56,7 +56,7 @@ public class PlanActivity extends AppCompatActivity {
         saveChanges();
         Intent intent = new Intent(this, EditPlannedExpenseActivity.class);
         intent.setAction(ACTION_MAIN);
-        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_ID", plan.getPlanId());
+        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         startActivityForResult(intent, CREATE_PLANNED_EXPENSE);
     }
 
@@ -64,7 +64,7 @@ public class PlanActivity extends AppCompatActivity {
         saveChanges();
         Intent intent = new Intent(this, EditDepositActivity.class);
         intent.setAction(ACTION_MAIN);
-        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_ID", plan.getPlanId());
+        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         startActivityForResult(intent, CREATE_DEPOSIT);
     }
 
@@ -72,7 +72,7 @@ public class PlanActivity extends AppCompatActivity {
         saveChanges();
         Intent intent = new Intent(this, EditActualExpenseActivity.class);
         intent.setAction(ACTION_MAIN);
-        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_ID", plan.getPlanId());
+        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         startActivityForResult(intent, CREATE_ACTUAL_EXPENSE);
     }
 
@@ -80,7 +80,7 @@ public class PlanActivity extends AppCompatActivity {
         saveChanges();
         Intent intent = new Intent(this, ListActivity.class);
         intent.setAction(ACTION_MAIN);
-        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_ID", plan.getPlanId());
+        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("com.example.jonathon.agilebudgeting.LIST_TYPE", "PlannedItem");
         startActivity(intent);
     }
@@ -89,7 +89,7 @@ public class PlanActivity extends AppCompatActivity {
         saveChanges();
         Intent intent = new Intent(this, ListActivity.class);
         intent.setAction(ACTION_MAIN);
-        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_ID", plan.getPlanId());
+        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("com.example.jonathon.agilebudgeting.LIST_TYPE", "Deposit");
         startActivity(intent);
     }
@@ -98,7 +98,7 @@ public class PlanActivity extends AppCompatActivity {
         saveChanges();
         Intent intent = new Intent(this, ListActivity.class);
         intent.setAction(ACTION_MAIN);
-        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_ID", plan.getPlanId());
+        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("com.example.jonathon.agilebudgeting.LIST_TYPE", "ActualItem");
         startActivity(intent);
     }

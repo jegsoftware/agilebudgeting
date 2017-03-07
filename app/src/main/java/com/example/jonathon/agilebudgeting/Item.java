@@ -2,11 +2,13 @@ package com.example.jonathon.agilebudgeting;
 
 import android.content.Context;
 
+import java.io.Serializable;
+
 /**
  * Created by Jonathon on 1/7/2017.
  */
 
-public abstract class Item {
+public abstract class Item implements Serializable {
     protected String description;
     protected double amount;
     protected String account; //TODO: Make account user-maintainable

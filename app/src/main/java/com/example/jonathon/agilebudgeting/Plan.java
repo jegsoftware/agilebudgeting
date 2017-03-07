@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,7 +15,7 @@ import java.util.Iterator;
  * Created by Jonathon on 1/7/2017.
  */
 
-public class Plan {
+public class Plan implements Serializable {
     private double amountToCapitalOne;
     private double amountToSavings;
     private PlanStatus planningStatus;
@@ -52,39 +53,6 @@ public class Plan {
         PlanningPeriod planPeriod = new PlanningPeriod(planDate);
 
         return createPlan(planPeriod, persister);
-    }
-
-    public static Plan createPlan(long planId)
-    {
-        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                AgileBudgetingContract.Plans.COLUMN_NAME_PERIODYEAR,
-                AgileBudgetingContract.Plans.COLUMN_NAME_PERIODNUM,
-        };
-
-        String selection = AgileBudgetingContract.Plans._ID + " = ?";
-        String[] selectionArgs = { String.valueOf(planId) };
-
-        Cursor cursor = db.query(
-                AgileBudgetingContract.Plans.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
-        cursor.moveToFirst();
-        int perNum = cursor.getInt(cursor.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_PERIODNUM));
-        int perYear = cursor.getInt(cursor.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_PERIODYEAR));
-
-        cursor.close();
-        db.close();
-
-        return createPlan(new PlanningPeriod(perNum, perYear), new DBPlanPersister());
     }
 
     public long getPlanId() {

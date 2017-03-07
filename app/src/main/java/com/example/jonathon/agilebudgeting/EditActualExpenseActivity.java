@@ -25,8 +25,7 @@ public class EditActualExpenseActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String action = intent.getAction();
 
-        long planId = intent.getLongExtra("com.example.jonathon.agilebudgeting.PLAN_ID", -1);
-        plan = Plan.createPlan(planId);
+        plan = (Plan) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN");
         if (action.equals(ACTION_MAIN)) {
             TextView actualExpensePeriod = (TextView) findViewById(R.id.actualExpensePeriodDisplay);
             actualExpensePeriod.setText(plan.getPeriod().getPeriodStartDate());
@@ -87,7 +86,7 @@ public class EditActualExpenseActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, MatchActualToPlan.class);
         intent.setAction(ACTION_MAIN);
-        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_ID", plan.getPlanId());
+        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("com.example.jonathon.agilebudgeting.ACTUAL_ITEM_ID", item.getItemId());
 
         startActivityForResult(intent, MATCH_ACTUAL_PLANNED);

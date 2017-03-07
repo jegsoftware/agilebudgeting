@@ -4,11 +4,13 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.io.Serializable;
+
 /**
  * Created by Jonathon on 3/4/2017.
  */
 
-public class DBPlanPersister implements IPersistPlan {
+public class DBPlanPersister implements IPersistPlan,Serializable {
 
     public static final String SELECTION =
             AgileBudgetingContract.Plans.COLUMN_NAME_PERIODNUM + " = ? AND " +

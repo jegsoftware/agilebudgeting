@@ -25,8 +25,7 @@ public class EditDepositActivity extends AppCompatActivity{
         Intent intent = getIntent();
         String action = intent.getAction();
 
-        long planId = intent.getLongExtra("com.example.jonathon.agilebudgeting.PLAN_ID", -1);
-        plan = Plan.createPlan(planId);
+        plan = (Plan) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN");
         if (action.equals(ACTION_MAIN)) {
             TextView depositPeriod = (TextView) findViewById(R.id.depositPeriodDisplay);
             depositPeriod.setText(plan.getPeriod().getPeriodStartDate());

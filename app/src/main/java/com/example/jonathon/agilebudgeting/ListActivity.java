@@ -24,7 +24,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
     private static final int EDIT_PLANNED_ITEM = 0;
     private static final int EDIT_DEPOSIT = 1;
     private static final int EDIT_ACTUAL_ITEM = 2;
-    protected long planId;
+    protected Plan plan;
     protected String listType;
 
     @Override
@@ -36,14 +36,13 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         String action = intent.getAction();
 
         if (action.equals(ACTION_MAIN)) {
-            planId = intent.getLongExtra("com.example.jonathon.agilebudgeting.PLAN_ID", -1);
+            plan = (Plan) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN");
             listType = intent.getStringExtra("com.example.jonathon.agilebudgeting.LIST_TYPE");
             populateList();
         }
     }
 
     protected void populateList() {
-        Plan plan = Plan.createPlan(planId);
         ArrayList<? extends Item> items;
         if ("Deposit".equals(listType)){
             items = plan.getDeposits();
@@ -100,7 +99,6 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
     public void backToPlan(View view) {
         Intent intent = new Intent(this, PlanActivity.class);
         intent.setAction(ACTION_MAIN);
-        Plan plan = Plan.createPlan(planId);
 
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_PERIOD", plan.getPeriod());
         startActivity(intent);
@@ -130,7 +128,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         intent.setAction(ACTION_EDIT);
-        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_ID", planId);
+        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("com.example.jonathon.agilebudgeting.ITEM_ID", clickedItem.getItemId());
         startActivityForResult(intent, requestCode);
     }
@@ -138,6 +136,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
 
+        //TODO: Figure out how this is broken - new values not populating.
         LinearLayout listView = (LinearLayout) findViewById(R.id.itemList);
         listView.removeAllViews();
         populateList();
