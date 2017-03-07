@@ -31,7 +31,9 @@ public class PlanActivity extends AppCompatActivity {
         if (action.equals(ACTION_MAIN)) {
             GregorianCalendar selectedDate = (GregorianCalendar) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN_DATE");
 
-            plan = Plan.createPlan(selectedDate);
+            //plan = Plan.createPlan(selectedDate);
+            PlanningPeriod period = new PlanningPeriod(selectedDate);
+            plan = Plan.createPlan(period, new DBPlanPersister());
         }
         else
         {

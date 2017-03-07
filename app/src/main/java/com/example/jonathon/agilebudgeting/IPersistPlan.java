@@ -6,5 +6,5 @@ package com.example.jonathon.agilebudgeting;
 
 public interface IPersistPlan {
     void persist(Plan plan);
-    Plan retrieve(PlanningPeriod period);
+    Plan populate(Plan newPlan, PlanningPeriod period);
 }

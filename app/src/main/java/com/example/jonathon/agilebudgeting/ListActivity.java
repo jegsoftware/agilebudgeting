@@ -8,7 +8,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import static android.content.Intent.ACTION_EDIT;
@@ -95,8 +99,20 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
 
     public void backToPlan(View view) {
         Intent intent = new Intent(this, PlanActivity.class);
-        intent.setAction(ACTION_VIEW);
-        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_ID", planId);
+        intent.setAction(ACTION_MAIN);
+        Plan plan = Plan.createPlan(planId);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat();
+        dateFormat.applyPattern("MM/dd/yyyy");
+        GregorianCalendar periodDate = new GregorianCalendar();
+        try {
+            Date dateObj = dateFormat.parse(plan.getPlanStartDate());
+            periodDate.setTime(dateObj);
+        }
+        catch (ParseException e) {
+        }
+
+        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_DATE", periodDate);
         startActivity(intent);
     }
 

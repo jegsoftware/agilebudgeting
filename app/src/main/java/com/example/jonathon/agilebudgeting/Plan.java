@@ -37,6 +37,11 @@ public class Plan {
         planId = -1;
     }
 
+    public static Plan createPlan(PlanningPeriod planPeriod, IPersistPlan persister) {
+        Plan newPlan = new Plan();
+        return persister.populate(newPlan, planPeriod);
+    }
+
     public static Plan createPlan(Calendar planDate) {
         PlanningPeriod planPeriod = new PlanningPeriod(planDate);
 
@@ -146,6 +151,10 @@ public class Plan {
 
     public long getPlanId() {
         return planId;
+    }
+
+    public void setPlanId(long planId) {
+        this.planId = planId;
     }
 
     public String getPlanStartDate() {
