@@ -31,14 +31,10 @@ public class PlanActivity extends AppCompatActivity {
         if (action.equals(ACTION_MAIN)) {
             GregorianCalendar selectedDate = (GregorianCalendar) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN_DATE");
 
-            //plan = Plan.createPlan(selectedDate);
-            PlanningPeriod period = new PlanningPeriod(selectedDate);
-            plan = Plan.createPlan(period, new DBPlanPersister());
-        }
-        else
-        {
-            long planId = intent.getLongExtra("com.example.jonathon.agilebudgeting.PLAN_ID", -1);
-            plan = Plan.createPlan(planId);
+            plan = Plan.createPlan(selectedDate, new DBPlanPersister());
+        } else {
+            // we should never get here
+            throw new IllegalStateException("Started plan activity with action other than ACTION_MAIN");
         }
 
         EditText planBeginDateField = (EditText) findViewById(R.id.periodBeginDate);

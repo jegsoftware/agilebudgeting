@@ -24,6 +24,8 @@ public class Plan {
     private ArrayList<Deposit> deposits;
     private long planId;
     private ArrayList<ActualItem> actualItems;
+    private IPersistPlan persister;
+    private boolean initializing;
 
     private Plan()
     {
@@ -35,87 +37,29 @@ public class Plan {
         deposits = new ArrayList<Deposit>();
         actualItems = new ArrayList<ActualItem>();
         planId = -1;
+        initializing = true;
     }
 
     public static Plan createPlan(PlanningPeriod planPeriod, IPersistPlan persister) {
         Plan newPlan = new Plan();
-        return persister.populate(newPlan, planPeriod);
+        newPlan.persister = persister;
+        persister.populate(newPlan, planPeriod);
+        newPlan.initializing = false;
+        return newPlan;
     }
 
-    public static Plan createPlan(Calendar planDate) {
+    public static Plan createPlan(Calendar planDate, IPersistPlan persister) {
         PlanningPeriod planPeriod = new PlanningPeriod(planDate);
 
-        return createPlan(planPeriod);
-    }
-
-    public static Plan createPlan(PlanningPeriod planPeriod)
-    {
-        Plan newPlan = new Plan();
-        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                AgileBudgetingContract.Plans._ID,
-                AgileBudgetingContract.Plans.COLUMN_NAME_PLANNING_STATUS,
-                AgileBudgetingContract.Plans.COLUMN_NAME_ACTUALS_STATUS,
-                AgileBudgetingContract.Plans.COLUMN_NAME_PERIODYEAR,
-                AgileBudgetingContract.Plans.COLUMN_NAME_PERIODNUM,
-        };
-
-        String selection =
-                AgileBudgetingContract.Plans.COLUMN_NAME_PERIODNUM + " = ? AND " +
-                AgileBudgetingContract.Plans.COLUMN_NAME_PERIODYEAR + " = ?";
-        String[] selectionArgs = {
-                String.valueOf(planPeriod.getPeriodNumber()),
-                String.valueOf(planPeriod.getPeriodYear())
-        };
-
-        Cursor cursor = db.query(
-                AgileBudgetingContract.Plans.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
-        cursor.moveToFirst();
-
-        if (cursor.isAfterLast()) {
-            newPlan.setPeriod(planPeriod);
-        }
-        else {
-            long planId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Plans._ID));
-            String planningStatusString = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_PLANNING_STATUS));
-            String actualsStatusString = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_ACTUALS_STATUS));
-            int perNum = cursor.getInt(cursor.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_PERIODNUM));
-            int perYear = cursor.getInt(cursor.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_PERIODYEAR));
-
-            newPlan.planId = planId;
-            newPlan.planningStatus = PlanStatus.valueOf(planningStatusString);
-            newPlan.actualsStatus = PlanStatus.valueOf(actualsStatusString);
-            newPlan.period = new PlanningPeriod(perNum, perYear);
-            newPlan.populateItems();
-        }
-        cursor.close();
-        db.close();
-
-        return newPlan;
-
+        return createPlan(planPeriod, persister);
     }
 
     public static Plan createPlan(long planId)
     {
-        Plan newPlan = new Plan();
-        newPlan.planId = planId;
-
         AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
-                AgileBudgetingContract.Plans.COLUMN_NAME_PLANNING_STATUS,
-                AgileBudgetingContract.Plans.COLUMN_NAME_ACTUALS_STATUS,
                 AgileBudgetingContract.Plans.COLUMN_NAME_PERIODYEAR,
                 AgileBudgetingContract.Plans.COLUMN_NAME_PERIODNUM,
         };
@@ -134,19 +78,13 @@ public class Plan {
         );
 
         cursor.moveToFirst();
-        String planningStatusString = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_PLANNING_STATUS));
-        String actualsStatusString = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_ACTUALS_STATUS));
         int perNum = cursor.getInt(cursor.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_PERIODNUM));
         int perYear = cursor.getInt(cursor.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_PERIODYEAR));
 
         cursor.close();
         db.close();
 
-        newPlan.planningStatus = PlanStatus.valueOf(planningStatusString);
-        newPlan.actualsStatus = PlanStatus.valueOf(actualsStatusString);
-        newPlan.period = new PlanningPeriod(perNum, perYear);
-        newPlan.populateItems();
-        return newPlan;
+        return createPlan(new PlanningPeriod(perNum, perYear), new DBPlanPersister());
     }
 
     public long getPlanId() {
@@ -297,27 +235,11 @@ public class Plan {
         db.close();
     }
 
-    public long persist() {
-        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(AgileBudgetingContract.Plans.COLUMN_NAME_PERIODNUM, period.getPeriodNumber());
-        values.put(AgileBudgetingContract.Plans.COLUMN_NAME_PERIODYEAR, period.getPeriodYear());
-        values.put(AgileBudgetingContract.Plans.COLUMN_NAME_PLANNING_STATUS, planningStatus.name());
-        values.put(AgileBudgetingContract.Plans.COLUMN_NAME_ACTUALS_STATUS, actualsStatus.name());
+    private void persist() {
+        if (initializing) return;
 
-        if (planId == -1) {
-            planId = db.insert(AgileBudgetingContract.Plans.TABLE_NAME, null, values);
-        }
-        else {
-            String selection = AgileBudgetingContract.Plans._ID + " = ?";
-            String[] selectionArgs = { String.valueOf(planId) };
-
-            db.update(AgileBudgetingContract.Plans.TABLE_NAME, values, selection, selectionArgs);
-        }
-        db.close();
-
-        return planId;
+        persister.persist(this);
+        return;
     }
 
     public ArrayList<Deposit> getDeposits() {

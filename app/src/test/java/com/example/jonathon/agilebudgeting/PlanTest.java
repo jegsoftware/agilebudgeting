@@ -112,7 +112,7 @@ public class PlanTest {
 
     @Test
     public void createPlanFromDate() throws Exception {
-        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,2,7));
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,2,7), new DBPlanPersister());
         assertEquals(1L, testPlan.getPlanId());
     }
 
@@ -123,13 +123,13 @@ public class PlanTest {
 
     @Test
     public void getPlanId() throws Exception {
-        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,2,7));
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,2,7), new DBPlanPersister());
         assertEquals(1L, testPlan.getPlanId());
     }
 
     @Test
     public void getPlanStartDate() throws Exception {
-        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,2,7));
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,2,7), new DBPlanPersister());
         assertEquals("02/01/2017", testPlan.getPlanStartDate());
     }
 
