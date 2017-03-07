@@ -186,55 +186,6 @@ public class Plan {
 
     public double getNetActualAmount() { return getTotalPlannedExpenses() - getTotalActualExpenses(); }
 
-    private void populateItems() {
-        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                AgileBudgetingContract.Items._ID,
-                AgileBudgetingContract.Items.COLUMN_NAME_TYPE,
-        };
-
-        String selection = AgileBudgetingContract.Items.COLUMN_NAME_PLANID + " = ?";
-        String[] selectionArgs = {
-                String.valueOf(planId),
-        };
-
-        Cursor cursor = db.query(
-                AgileBudgetingContract.Items.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            String type = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_TYPE));
-            long itemId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Items._ID));
-
-            if ("Deposit".equals(type)) {
-                Deposit deposit = Deposit.createDeposit(itemId);
-                addDeposit(deposit);
-            }
-            else if ("PlannedItem".equals(type)) {
-                PlannedItem plannedItem = PlannedItem.createItem(itemId);
-                addPlannedItem(plannedItem);
-            }
-            else if ("ActualItem".equals(type)) {
-                ActualItem actualItem = ActualItem.createActualItem(itemId);
-                addActualItem(actualItem);
-            }
-
-            cursor.moveToNext();
-        }
-
-        cursor.close();
-        db.close();
-    }
-
     private void persist() {
         if (initializing) return;
 
