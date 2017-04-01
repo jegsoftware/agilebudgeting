@@ -15,11 +15,10 @@ import java.util.List;
 
 public class ActualItem extends Item {
 
-    private String date;
     private ArrayList<PlannedItem> plannedItems;
 
     private ActualItem() {
-        date = "";
+        super();
         description = "";
         amount = 0;
         account = "";
@@ -31,7 +30,7 @@ public class ActualItem extends Item {
     public static ActualItem createActualItem(long planId, String date, String desc, double amt, String acct) {
         ActualItem newActualItem = new ActualItem();
 
-        newActualItem.date = date;
+        newActualItem.setDate(date);
         newActualItem.description = desc;
         newActualItem.amount = amt;
         newActualItem.account = acct;
@@ -76,7 +75,7 @@ public class ActualItem extends Item {
         long planId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_PLANID));
         cursor.close();
 
-        newActualItem.date = date;
+        newActualItem.setDate(date);
         newActualItem.description = desc;
         newActualItem.amount = amt;
         newActualItem.account = acct;
@@ -118,20 +117,12 @@ public class ActualItem extends Item {
 
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public long persist() {
         AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_PLANID, planId);
-        values.put(AgileBudgetingContract.Items.COLUMN_NAME_DATE, date);
+        values.put(AgileBudgetingContract.Items.COLUMN_NAME_DATE, getDate());
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION, description);
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT, amount);
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT, account);

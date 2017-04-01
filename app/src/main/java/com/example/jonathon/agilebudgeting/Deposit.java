@@ -11,10 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class Deposit extends Item {
 
-    private String date;
-
     private Deposit() {
-        date = "";
         description = "";
         amount = 0;
         account = "";

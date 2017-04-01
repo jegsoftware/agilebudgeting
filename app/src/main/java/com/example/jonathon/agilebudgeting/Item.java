@@ -14,8 +14,10 @@ public abstract class Item implements Serializable {
     protected String account; //TODO: Make account user-maintainable
     protected long itemId;
     protected long planId;
+    protected String date;
 
     protected Item() {
+        date = "";
     }
 
     public String getDescription() {
@@ -52,6 +54,14 @@ public abstract class Item implements Serializable {
 
     public void setPlanId(long planId) {
         this.planId = planId;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public abstract long persist();
