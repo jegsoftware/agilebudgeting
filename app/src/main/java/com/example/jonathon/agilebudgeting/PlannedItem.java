@@ -1,6 +1,7 @@
 package com.example.jonathon.agilebudgeting;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Created by Jonathon on 1/7/2017.
@@ -14,7 +15,6 @@ public class PlannedItem extends Item {
         description = "";
         amount = 0;
         account = "";
-        itemId = -1;
         actualItems = new ArrayList<ActualItem>();
     }
 
@@ -27,12 +27,13 @@ public class PlannedItem extends Item {
         newItem.setPlanPeriod(planId);
         newItem.persister = persister;
         newItem.type = "PlannedItem";
-        newItem.itemId = persister.persist(newItem);
+        newItem.itemId = UUID.randomUUID();
+        persister.persist(newItem);
 
         return newItem;
     }
 
-    public static PlannedItem createItem(long itemID, IPersistItem persister) {
+    public static PlannedItem createItem(UUID itemID, IPersistItem persister) {
         Item retrievedItem = persister.retrieve(itemID);
         PlannedItem plannedItem = new PlannedItem();
         plannedItem.type = "PlannedItem";

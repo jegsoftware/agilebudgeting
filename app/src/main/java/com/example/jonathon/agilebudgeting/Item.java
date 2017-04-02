@@ -1,6 +1,7 @@
 package com.example.jonathon.agilebudgeting;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Created by Jonathon on 1/7/2017.
@@ -10,7 +11,7 @@ public class Item implements Serializable {
     protected String description;
     protected double amount;
     protected String account; //TODO: Make account user-maintainable
-    protected long itemId;
+    protected UUID itemId; 
     protected PlanningPeriod planPeriod;
     protected String date;
     protected IPersistItem persister;
@@ -64,7 +65,7 @@ public class Item implements Serializable {
         this.date = date;
     }
 
-    public long getItemId() {
+    public UUID getItemId() {
         return itemId;
     }
 
@@ -72,8 +73,8 @@ public class Item implements Serializable {
         return type;
     }
 
-    public long persist() {
-        return persister.persist(this);
+    public void persist() {
+        persister.persist(this);
     }
 
 }

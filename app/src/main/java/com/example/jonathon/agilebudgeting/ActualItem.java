@@ -2,6 +2,7 @@ package com.example.jonathon.agilebudgeting;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.UUID;
 
 /**
  * Created by Jonathon on 1/28/2017.
@@ -16,7 +17,6 @@ public class ActualItem extends Item {
         description = "";
         amount = 0;
         account = "";
-        itemId = -1;
         plannedItems = new ArrayList<PlannedItem>();
     }
 
@@ -30,13 +30,14 @@ public class ActualItem extends Item {
         newActualItem.planPeriod = planId;
         newActualItem.persister = persister;
         newActualItem.type = "ActualItem";
-        newActualItem.itemId = persister.persist(newActualItem);
+        newActualItem.itemId = UUID.randomUUID();
+        persister.persist(newActualItem);
 
         return newActualItem;
 
     }
 
-    public static ActualItem createActualItem(long itemID, IPersistItem persister) {
+    public static ActualItem createActualItem(UUID itemID, IPersistItem persister) {
         Item retrievedItem = persister.retrieve(itemID);
         ActualItem actualItem = new ActualItem();
         actualItem.type = "ActualItem";
@@ -54,7 +55,7 @@ public class ActualItem extends Item {
     }
 
     private static void populatePlannedItems(ActualItem item) {
-        long[] itemIds = item.persister.retrieveRelatedItems(item);
+        UUID[] itemIds = item.persister.retrieveRelatedItems(item);
         for (int i = 0; i < itemIds.length; i++) {
             item.plannedItems.add(PlannedItem.createItem(itemIds[i],item.persister));
         }
@@ -70,12 +71,7 @@ public class ActualItem extends Item {
 
     private boolean isMatchedTo(PlannedItem plannedItem) {
         if (plannedItems.contains(plannedItem)) return true;
-        Iterator<PlannedItem> iter = plannedItems.iterator();
-        while (iter.hasNext()) {
-            PlannedItem curItem = iter.next();
-            if (curItem.getItemId() == plannedItem.getItemId()) return true;
-        }
-        return false;
+        return hasMatch(plannedItem);
     }
 
     private void saveRelationship(PlannedItem plannedItem) {
@@ -86,7 +82,7 @@ public class ActualItem extends Item {
         Iterator<PlannedItem> iter = plannedItems.iterator();
         while (iter.hasNext()) {
             PlannedItem curItem = iter.next();
-            if (item.getItemId() == (curItem.getItemId())) {
+            if (item.getItemId().equals(curItem.getItemId())) {
                 return true;
             }
         }

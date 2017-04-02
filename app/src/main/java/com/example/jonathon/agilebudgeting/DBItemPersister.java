@@ -5,17 +5,25 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Created by Jonathon on 3/4/2017.
  */
 
 public class DBItemPersister implements IPersistItem, Serializable {
+
+    public static final String SELECTION =
+            AgileBudgetingContract.Items.COLUMN_NAME_ITEMUUID + " = ?";
+
     @Override
-    public long persist(Item item) {
+    public void persist(Item item) {
 
         AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String itemId = item.getItemId().toString();
+
         ContentValues values = new ContentValues();
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_PERIODNUM, item.getPlanPeriod().getPeriodNumber());
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_PERIODYEAR, item.getPlanPeriod().getPeriodYear());
@@ -24,21 +32,19 @@ public class DBItemPersister implements IPersistItem, Serializable {
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT, item.getAmount());
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT, item.getAccount());
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_TYPE, item.getType());
+        values.put(AgileBudgetingContract.Items.COLUMN_NAME_ITEMUUID, itemId);
 
-        long itemId = item.getItemId();
-        if (itemId == -1) {
-            itemId = db.insert(AgileBudgetingContract.Items.TABLE_NAME, null, values);
+        String[] selectionArgs = { itemId  };
+
+        Cursor cursor = findItem(db, selectionArgs);
+
+        if (cursor.isAfterLast()) {
+            db.insert(AgileBudgetingContract.Items.TABLE_NAME, null, values);
+        } else {
+            db.update(AgileBudgetingContract.Items.TABLE_NAME, values, SELECTION, selectionArgs);
         }
-        else {
-            String selection = AgileBudgetingContract.Items._ID + " = ?";
-            String[] selectionArgs = { String.valueOf(itemId) };
-
-            db.update(AgileBudgetingContract.Items.TABLE_NAME, values, selection, selectionArgs);
-        }
-
+        cursor.close();
         db.close();
-        return itemId;
-
     }
 
     @Override
@@ -46,8 +52,8 @@ public class DBItemPersister implements IPersistItem, Serializable {
         AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(AgileBudgetingContract.Match.COLUMN_NAME_ACTUAL_ID, item1.getItemId());
-        values.put(AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID, item2.getItemId());
+        values.put(AgileBudgetingContract.Match.COLUMN_NAME_ACTUAL_ID, item1.getItemId().toString());
+        values.put(AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID, item2.getItemId().toString());
 
         db.insert(AgileBudgetingContract.Match.TABLE_NAME, null, values);
         db.close();
@@ -55,33 +61,13 @@ public class DBItemPersister implements IPersistItem, Serializable {
     }
 
     @Override
-    public Item retrieve(long itemId) {
+    public Item retrieve(UUID itemId) {
         AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String[] projection = {
-                AgileBudgetingContract.Items.COLUMN_NAME_DATE,
-                AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION,
-                AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT,
-                AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT,
-                AgileBudgetingContract.Items.COLUMN_NAME_PERIODNUM,
-                AgileBudgetingContract.Items.COLUMN_NAME_PERIODYEAR,
-        };
+        String[] selectionArgs = { itemId.toString() };
+        Cursor cursor = findItem(db, selectionArgs);
 
-        String selection = AgileBudgetingContract.Items._ID + " = ?";
-        String[] selectionArgs = { String.valueOf(itemId) };
-
-        Cursor cursor = db.query(
-                AgileBudgetingContract.Items.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
-        cursor.moveToFirst();
         String date = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_DATE));
         String desc = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION));
         double amt = cursor.getDouble(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT));
@@ -104,7 +90,7 @@ public class DBItemPersister implements IPersistItem, Serializable {
     }
 
     @Override
-    public long[] retrieveRelatedItems(Item item) {
+    public UUID[] retrieveRelatedItems(Item item) {
         AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -126,16 +112,42 @@ public class DBItemPersister implements IPersistItem, Serializable {
         );
 
         cursor.moveToFirst();
-        long[] items = new long[cursor.getCount()];
+        UUID[] items = new UUID[cursor.getCount()];
         int idx = 0;
         while (!cursor.isAfterLast()) {
-            long plannedItemId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID));
-            items[idx++] = plannedItemId;
+            String plannedItemId = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID));
+            items[idx++] = UUID.fromString(plannedItemId);
             cursor.moveToNext();
         }
         cursor.close();
+        db.close();
 
         return items;
     }
 
+    private Cursor findItem(SQLiteDatabase db, String[] selectionArgs) {
+
+        String[] projection = {
+                AgileBudgetingContract.Items.COLUMN_NAME_DATE,
+                AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION,
+                AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT,
+                AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT,
+                AgileBudgetingContract.Items.COLUMN_NAME_PERIODNUM,
+                AgileBudgetingContract.Items.COLUMN_NAME_PERIODYEAR,
+                AgileBudgetingContract.Items.COLUMN_NAME_ITEMUUID,
+        };
+
+        Cursor cursor = db.query(
+                AgileBudgetingContract.Items.TABLE_NAME,
+                projection,
+                SELECTION,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        cursor.moveToFirst();
+        return cursor;
+    }
 }

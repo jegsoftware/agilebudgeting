@@ -85,7 +85,7 @@ public class EditActualExpenseActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MatchActualToPlan.class);
         intent.setAction(ACTION_MAIN);
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
-        intent.putExtra("com.example.jonathon.agilebudgeting.ACTUAL_ITEM_ID", item.getItemId());
+        intent.putExtra("com.example.jonathon.agilebudgeting.ACTUAL_ITEM", item);
 
         startActivityForResult(intent, MATCH_ACTUAL_PLANNED);
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 public class MatchActualToPlan extends AppCompatActivity {
 
@@ -24,10 +25,8 @@ public class MatchActualToPlan extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        long actualItemID = intent.getLongExtra("com.example.jonathon.agilebudgeting.ACTUAL_ITEM_ID", -1);
+        actualItem = (ActualItem) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ACTUAL_ITEM");
         plan = (Plan) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN");
-
-        actualItem = ActualItem.createActualItem(actualItemID, new DBItemPersister());
 
         populateList();
 
@@ -51,7 +50,7 @@ public class MatchActualToPlan extends AppCompatActivity {
             checkBox.setChecked(actualItem.hasMatch(curItem));
 
             TextView itemId = new TextView(itemView.getContext());
-            itemId.setText(String.valueOf(curItem.getItemId()));
+            itemId.setText(curItem.getItemId().toString());
             itemId.setVisibility(View.GONE);
 
             itemView.addView(checkBox, 0);
@@ -63,8 +62,7 @@ public class MatchActualToPlan extends AppCompatActivity {
     }
 
     public void saveMatches(View view) {
-        Context context = getApplicationContext();
-
+        // TODO: Support unchecking a previously saved match
         LinearLayout listView = (LinearLayout) findViewById(R.id.matchingItemsList);
         int itemCount = listView.getChildCount();
         for (int i=0; i < itemCount; i++) {
@@ -72,7 +70,7 @@ public class MatchActualToPlan extends AppCompatActivity {
             CheckBox checkBox = (CheckBox) itemView.getChildAt(0);
             if(checkBox.isChecked()) {
                 TextView itemIdText = (TextView) itemView.getChildAt(1);
-                long plannedItemId = Long.parseLong(itemIdText.getText().toString());
+                UUID plannedItemId = UUID.fromString(itemIdText.getText().toString());
                 PlannedItem plannedItem = PlannedItem.createItem(plannedItemId, new DBItemPersister());
 
                 actualItem.addPlannedItem(plannedItem);

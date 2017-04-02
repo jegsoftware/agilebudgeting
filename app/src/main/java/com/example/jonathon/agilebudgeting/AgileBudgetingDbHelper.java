@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class AgileBudgetingDbHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 6;
     public static final String DATABASE_NAME = "AgileBudgeting.db";
 
     private static final String SQL_CREATE_PLANS_TABLE =
@@ -24,6 +24,7 @@ public class AgileBudgetingDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ITEMS_TABLE =
             "CREATE TABLE " + AgileBudgetingContract.Items.TABLE_NAME + " (" +
                     AgileBudgetingContract.Items._ID + " INTEGER PRIMARY KEY," +
+                    AgileBudgetingContract.Items.COLUMN_NAME_ITEMUUID + " TEXT," +
                     AgileBudgetingContract.Items.COLUMN_NAME_PERIODNUM + " INTEGER," +
                     AgileBudgetingContract.Items.COLUMN_NAME_PERIODYEAR + " INTEGER," +
                     AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION + " TEXT," +
@@ -35,8 +36,8 @@ public class AgileBudgetingDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_MATCHING_TABLE =
             "CREATE TABLE " + AgileBudgetingContract.Match.TABLE_NAME + " (" +
                     AgileBudgetingContract.Match._ID + " INTEGER PRIMARY KEY," +
-                    AgileBudgetingContract.Match.COLUMN_NAME_ACTUAL_ID + " INTEGER," +
-                    AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID + " INTEGER)";
+                    AgileBudgetingContract.Match.COLUMN_NAME_ACTUAL_ID + " TEXT," +
+                    AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID + " TEXT)";
 
     private static final String SQL_DELETE_PLANS_TABLE =
             "DROP TABLE IF EXISTS " + AgileBudgetingContract.Plans.TABLE_NAME;

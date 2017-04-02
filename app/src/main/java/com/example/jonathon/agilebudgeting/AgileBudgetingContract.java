@@ -20,6 +20,7 @@ public final class AgileBudgetingContract {
 
     public static final class Items implements BaseColumns {
         public static final String TABLE_NAME = "items";
+        public static final String COLUMN_NAME_ITEMUUID = "uuid";
         public static final String COLUMN_NAME_PERIODNUM = "periodnum";
         public static final String COLUMN_NAME_PERIODYEAR = "periodyear";
         public static final String COLUMN_NAME_DESCRIPTION = "description";

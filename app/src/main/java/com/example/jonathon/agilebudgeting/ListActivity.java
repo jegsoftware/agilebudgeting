@@ -136,12 +136,11 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
 
-        //TODO: Figure out how this is broken - new values not populating.
         LinearLayout listView = (LinearLayout) findViewById(R.id.itemList);
         listView.removeAllViews();
         populateList();
 
-/*      TODO: Figure out a way to update just the changed item
+/*      TODO: Figure out a way to update just the changed item.  Until I do, new values won't show until you leave and return to the list.
         long itemId = data.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID",-1);
         Item editedItem;
 

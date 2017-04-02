@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Created by Jonathon on 3/4/2017.
@@ -111,7 +112,7 @@ public class DBPlanPersister implements IPersistPlan,Serializable {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
-                AgileBudgetingContract.Items._ID,
+                AgileBudgetingContract.Items.COLUMN_NAME_ITEMUUID,
                 AgileBudgetingContract.Items.COLUMN_NAME_TYPE,
         };
 
@@ -137,7 +138,8 @@ public class DBPlanPersister implements IPersistPlan,Serializable {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             String type = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_TYPE));
-            long itemId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Items._ID));
+            String itemIdStr = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_ITEMUUID));
+            UUID itemId = UUID.fromString(itemIdStr);
 
             if ("Deposit".equals(type)) {
                 Deposit deposit = Deposit.createDeposit(itemId, new DBItemPersister());

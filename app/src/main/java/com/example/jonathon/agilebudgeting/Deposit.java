@@ -1,5 +1,7 @@
 package com.example.jonathon.agilebudgeting;
 
+import java.util.UUID;
+
 /**
  * Created by Jonathon on 1/20/2017.
  */
@@ -10,7 +12,6 @@ public class Deposit extends Item {
         description = "";
         amount = 0;
         account = "";
-        itemId = -1;
     }
 
     public static Deposit createDeposit(PlanningPeriod planId, String date, String desc, double amt, String acct, IPersistItem persister) {
@@ -23,14 +24,15 @@ public class Deposit extends Item {
         newDeposit.planPeriod = planId;
         newDeposit.persister = persister;
         newDeposit.type = "Deposit";
-        newDeposit.itemId = persister.persist(newDeposit);
+        newDeposit.itemId = UUID.randomUUID();
+        persister.persist(newDeposit);
 
 
         return newDeposit;
 
     }
 
-    public static Deposit createDeposit(long itemID, IPersistItem persister) {
+    public static Deposit createDeposit(UUID itemID, IPersistItem persister) {
         Item retrievedItem = persister.retrieve(itemID);
         Deposit deposit = new Deposit();
         deposit.type = "Deposit";
