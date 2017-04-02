@@ -1,13 +1,7 @@
 package com.example.jonathon.agilebudgeting;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by Jonathon on 1/28/2017.
@@ -59,35 +53,10 @@ public class ActualItem extends Item {
     }
 
     private static void populatePlannedItems(ActualItem item) {
-        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID
-        };
-
-        String selection = AgileBudgetingContract.Match.COLUMN_NAME_ACTUAL_ID + " = ?";
-        String[] selectionArgs = { String.valueOf(item.getItemId()) };
-
-        Cursor cursor = db.query(
-                AgileBudgetingContract.Match.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            long plannedItemId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID));
-            item.plannedItems.add(PlannedItem.createItem(plannedItemId,item.persister));
-            cursor.moveToNext();
+        long[] itemIds = item.persister.retrieveRelatedItems(item);
+        for (int i = 0; i < itemIds.length; i++) {
+            item.plannedItems.add(PlannedItem.createItem(itemIds[i],item.persister));
         }
-        cursor.close();
-        db.close();
-
     }
 
     public void addPlannedItem(PlannedItem plannedItem) {
@@ -109,14 +78,7 @@ public class ActualItem extends Item {
     }
 
     private void saveRelationship(PlannedItem plannedItem) {
-        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(AgileBudgetingContract.Match.COLUMN_NAME_ACTUAL_ID, itemId);
-        values.put(AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID, plannedItem.getItemId());
-
-        db.insert(AgileBudgetingContract.Match.TABLE_NAME, null, values);
-        db.close();
+        persister.persistRelationship(this, plannedItem);
     }
 
     public boolean hasMatch(PlannedItem item) {

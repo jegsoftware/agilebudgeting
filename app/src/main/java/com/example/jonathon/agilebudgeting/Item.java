@@ -1,9 +1,5 @@
 package com.example.jonathon.agilebudgeting;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-
 import java.io.Serializable;
 
 /**

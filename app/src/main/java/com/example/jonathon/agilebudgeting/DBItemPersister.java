@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jonathon on 3/4/2017.
@@ -34,8 +36,22 @@ public class DBItemPersister implements IPersistItem, Serializable {
 
             db.update(AgileBudgetingContract.Items.TABLE_NAME, values, selection, selectionArgs);
         }
+
         db.close();
         return itemId;
+
+    }
+
+    @Override
+    public void persistRelationship(Item item1, Item item2) {
+        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(AgileBudgetingContract.Match.COLUMN_NAME_ACTUAL_ID, item1.getItemId());
+        values.put(AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID, item2.getItemId());
+
+        db.insert(AgileBudgetingContract.Match.TABLE_NAME, null, values);
+        db.close();
 
     }
 
@@ -85,4 +101,40 @@ public class DBItemPersister implements IPersistItem, Serializable {
         newItem.persister = this;
         return newItem;
     }
+
+    @Override
+    public long[] retrieveRelatedItems(Item item) {
+        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String[] projection = {
+                AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID
+        };
+
+        String selection = AgileBudgetingContract.Match.COLUMN_NAME_ACTUAL_ID + " = ?";
+        String[] selectionArgs = { String.valueOf(item.getItemId()) };
+
+        Cursor cursor = db.query(
+                AgileBudgetingContract.Match.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        cursor.moveToFirst();
+        long[] items = new long[cursor.getCount()];
+        int idx = 0;
+        while (!cursor.isAfterLast()) {
+            long plannedItemId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID));
+            items[idx++] = plannedItemId;
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return items;
+    }
+
 }
