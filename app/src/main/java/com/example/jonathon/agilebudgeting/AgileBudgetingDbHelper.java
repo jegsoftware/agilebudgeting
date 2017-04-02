@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class AgileBudgetingDbHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "AgileBudgeting.db";
 
     private static final String SQL_CREATE_PLANS_TABLE =
@@ -24,7 +24,8 @@ public class AgileBudgetingDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ITEMS_TABLE =
             "CREATE TABLE " + AgileBudgetingContract.Items.TABLE_NAME + " (" +
                     AgileBudgetingContract.Items._ID + " INTEGER PRIMARY KEY," +
-                    AgileBudgetingContract.Items.COLUMN_NAME_PLANID + " INTEGER," +
+                    AgileBudgetingContract.Items.COLUMN_NAME_PERIODNUM + " INTEGER," +
+                    AgileBudgetingContract.Items.COLUMN_NAME_PERIODYEAR + " INTEGER," +
                     AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION + " TEXT," +
                     AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT + " REAL," +
                     AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT + " TEXT," +

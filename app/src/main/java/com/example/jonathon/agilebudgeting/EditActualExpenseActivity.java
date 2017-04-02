@@ -118,7 +118,7 @@ public class EditActualExpenseActivity extends AppCompatActivity {
         String acct = acctField.getText().toString();
 
         if (null == item) {
-            item = ActualItem.createActualItem(plan.getPlanId(), actualExpenseDate, desc, amount, acct, new DBItemPersister());
+            item = ActualItem.createActualItem(plan.getPeriod(), actualExpenseDate, desc, amount, acct, new DBItemPersister());
         } else {
             item.setDate(actualExpenseDate);
             item.setDescription(desc);

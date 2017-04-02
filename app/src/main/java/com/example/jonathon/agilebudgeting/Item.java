@@ -11,7 +11,7 @@ public class Item implements Serializable {
     protected double amount;
     protected String account; //TODO: Make account user-maintainable
     protected long itemId;
-    protected long planId;
+    protected PlanningPeriod planPeriod;
     protected String date;
     protected IPersistItem persister;
     protected String type;
@@ -48,12 +48,12 @@ public class Item implements Serializable {
         this.account = account;
     }
 
-    public long getPlanId() {
-        return planId;
+    public PlanningPeriod getPlanPeriod() {
+        return planPeriod;
     }
 
-    public void setPlanId(long planId) {
-        this.planId = planId;
+    public void setPlanPeriod(PlanningPeriod planPeriod) {
+        this.planPeriod = planPeriod;
     }
 
     public String getDate() {

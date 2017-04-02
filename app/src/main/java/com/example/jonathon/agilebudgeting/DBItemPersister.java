@@ -5,8 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Jonathon on 3/4/2017.
@@ -19,7 +17,8 @@ public class DBItemPersister implements IPersistItem, Serializable {
         AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(AgileBudgetingContract.Items.COLUMN_NAME_PLANID, item.getPlanId());
+        values.put(AgileBudgetingContract.Items.COLUMN_NAME_PERIODNUM, item.getPlanPeriod().getPeriodNumber());
+        values.put(AgileBudgetingContract.Items.COLUMN_NAME_PERIODYEAR, item.getPlanPeriod().getPeriodYear());
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_DATE, item.getDate());
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION, item.getDescription());
         values.put(AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT, item.getAmount());
@@ -65,7 +64,8 @@ public class DBItemPersister implements IPersistItem, Serializable {
                 AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION,
                 AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT,
                 AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT,
-                AgileBudgetingContract.Items.COLUMN_NAME_PLANID,
+                AgileBudgetingContract.Items.COLUMN_NAME_PERIODNUM,
+                AgileBudgetingContract.Items.COLUMN_NAME_PERIODYEAR,
         };
 
         String selection = AgileBudgetingContract.Items._ID + " = ?";
@@ -86,7 +86,8 @@ public class DBItemPersister implements IPersistItem, Serializable {
         String desc = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION));
         double amt = cursor.getDouble(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT));
         String acct = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT));
-        long planId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_PLANID));
+        int perNum = cursor.getInt(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_PERIODNUM));
+        int perYear = cursor.getInt(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_PERIODYEAR));
 
         cursor.close();
         db.close();
@@ -96,7 +97,7 @@ public class DBItemPersister implements IPersistItem, Serializable {
         newItem.setDescription(desc);
         newItem.setAmount(amt);
         newItem.setAccount(acct);
-        newItem.setPlanId(planId);
+        newItem.setPlanPeriod(new PlanningPeriod(perNum, perYear));
         newItem.itemId = itemId;
         newItem.persister = this;
         return newItem;

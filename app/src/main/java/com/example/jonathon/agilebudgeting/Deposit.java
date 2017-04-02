@@ -10,19 +10,21 @@ public class Deposit extends Item {
         description = "";
         amount = 0;
         account = "";
-        planId = -1;
         itemId = -1;
     }
 
-    public static Deposit createDeposit(long planId, String date, String desc, double amt, String acct, IPersistItem persister) {
+    public static Deposit createDeposit(PlanningPeriod planId, String date, String desc, double amt, String acct, IPersistItem persister) {
         Deposit newDeposit = new Deposit();
 
         newDeposit.date = date;
         newDeposit.description = desc;
         newDeposit.amount = amt;
         newDeposit.account = acct;
-        newDeposit.planId = planId;
+        newDeposit.planPeriod = planId;
         newDeposit.persister = persister;
+        newDeposit.type = "Deposit";
+        newDeposit.itemId = persister.persist(newDeposit);
+
 
         return newDeposit;
 
@@ -36,7 +38,7 @@ public class Deposit extends Item {
         deposit.setDescription(retrievedItem.getDescription());
         deposit.setAmount(retrievedItem.getAmount());
         deposit.setAccount(retrievedItem.getAccount());
-        deposit.setPlanId(retrievedItem.getPlanId());
+        deposit.setPlanPeriod(retrievedItem.getPlanPeriod());
         deposit.itemId = retrievedItem.getItemId();
         deposit.persister = persister;
         return deposit;

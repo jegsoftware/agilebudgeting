@@ -18,7 +18,7 @@ public class Plan implements Serializable {
     private PlanningPeriod period;
     private ArrayList<PlannedItem> plannedItems;
     private ArrayList<Deposit> deposits;
-    private long planId;
+    private PlanningPeriod planId;
     private ArrayList<ActualItem> actualItems;
     private IPersistPlan persister;
     private boolean initializing;
@@ -32,7 +32,6 @@ public class Plan implements Serializable {
         plannedItems = new ArrayList<PlannedItem>();
         deposits = new ArrayList<Deposit>();
         actualItems = new ArrayList<ActualItem>();
-        planId = -1;
         initializing = true;
     }
 
@@ -48,14 +47,6 @@ public class Plan implements Serializable {
         PlanningPeriod planPeriod = new PlanningPeriod(planDate);
 
         return createPlan(planPeriod, persister);
-    }
-
-    public long getPlanId() {
-        return planId;
-    }
-
-    public void setPlanId(long planId) {
-        this.planId = planId;
     }
 
     public String getPlanStartDate() {

@@ -63,7 +63,6 @@ public class DBPlanPersister implements IPersistPlan,Serializable {
             cursor.close();
         }
         else {
-            long planId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Plans._ID));
             String planningStatusString = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_PLANNING_STATUS));
             String actualsStatusString = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_ACTUALS_STATUS));
             int perNum = cursor.getInt(cursor.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_PERIODNUM));
@@ -75,9 +74,8 @@ public class DBPlanPersister implements IPersistPlan,Serializable {
             if(PlanStatus.CLOSED == PlanStatus.valueOf(actualsStatusString)) {
                 newPlan.closeActuals();
             }
-            newPlan.setPlanId(planId);
             newPlan.setPeriod(new PlanningPeriod(perNum, perYear));
-            populateItems(newPlan, planId);
+            populateItems(newPlan);
             cursor.close();
         }
         db.close();
@@ -108,7 +106,7 @@ public class DBPlanPersister implements IPersistPlan,Serializable {
         return cursor;
     }
 
-    private void populateItems(Plan newPlan, long planId) {
+    private void populateItems(Plan newPlan) {
         AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -117,9 +115,13 @@ public class DBPlanPersister implements IPersistPlan,Serializable {
                 AgileBudgetingContract.Items.COLUMN_NAME_TYPE,
         };
 
-        String selection = AgileBudgetingContract.Items.COLUMN_NAME_PLANID + " = ?";
+        String selection =
+                AgileBudgetingContract.Items.COLUMN_NAME_PERIODNUM + " = ? AND " +
+                AgileBudgetingContract.Items.COLUMN_NAME_PERIODYEAR + " = ?";
+
         String[] selectionArgs = {
-                String.valueOf(planId),
+                String.valueOf(newPlan.getPeriod().getPeriodNumber()),
+                String.valueOf(newPlan.getPeriod().getPeriodYear())
         };
 
         Cursor cursor = db.query(

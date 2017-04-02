@@ -14,19 +14,20 @@ public class PlannedItem extends Item {
         description = "";
         amount = 0;
         account = "";
-        planId = -1;
         itemId = -1;
         actualItems = new ArrayList<ActualItem>();
     }
 
-    public static PlannedItem createItem(long planId, String desc, double amt, String acct, IPersistItem persister) {
+    public static PlannedItem createItem(PlanningPeriod planId, String desc, double amt, String acct, IPersistItem persister) {
         PlannedItem newItem = new PlannedItem();
 
         newItem.setDescription(desc);
         newItem.setAmount(amt);
         newItem.setAccount(acct);
-        newItem.setPlanId(planId);
+        newItem.setPlanPeriod(planId);
         newItem.persister = persister;
+        newItem.type = "PlannedItem";
+        newItem.itemId = persister.persist(newItem);
 
         return newItem;
     }
@@ -38,7 +39,7 @@ public class PlannedItem extends Item {
         plannedItem.setDescription(retrievedItem.getDescription());
         plannedItem.setAmount(retrievedItem.getAmount());
         plannedItem.setAccount(retrievedItem.getAccount());
-        plannedItem.setPlanId(retrievedItem.getPlanId());
+        plannedItem.setPlanPeriod(retrievedItem.getPlanPeriod());
         plannedItem.itemId = retrievedItem.getItemId();
         plannedItem.persister = persister;
         return plannedItem;

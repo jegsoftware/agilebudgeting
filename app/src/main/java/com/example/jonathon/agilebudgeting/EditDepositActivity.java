@@ -90,7 +90,7 @@ public class EditDepositActivity extends AppCompatActivity{
         String acct = acctField.getText().toString();
 
         if (null == deposit) {
-            deposit = Deposit.createDeposit(plan.getPlanId(), depositDate, desc, amount, acct, new DBItemPersister());
+            deposit = Deposit.createDeposit(plan.getPeriod(), depositDate, desc, amount, acct, new DBItemPersister());
         }
         else {
             deposit.setDate(depositDate);
