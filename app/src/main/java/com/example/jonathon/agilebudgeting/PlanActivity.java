@@ -108,23 +108,22 @@ public class PlanActivity extends AppCompatActivity {
 
         if (requestCode == CREATE_PLANNED_EXPENSE) {
             if (resultCode == RESULT_OK) {
-                long expenseId = data.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID",-1);
-                plan.addPlannedItem(PlannedItem.createItem(expenseId, new DBItemPersister()));
+                PlannedItem item = (PlannedItem) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
+                plan.addPlannedItem(item);
                 updateTotals();
             }
         }
         else if (requestCode == CREATE_DEPOSIT) {
             if (resultCode == RESULT_OK) {
-                long depositId = data.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID",-1);
-                Deposit deposit = Deposit.createDeposit(depositId, new DBItemPersister());
+                Deposit deposit = (Deposit) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
                 plan.addDeposit(deposit);
                 updateTotals();
             }
         }
         else if (requestCode == CREATE_ACTUAL_EXPENSE) {
             if (resultCode == RESULT_OK) {
-                long expenseId = data.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID",-1);
-                plan.addActualItem(ActualItem.createActualItem(expenseId, new DBItemPersister()));
+                ActualItem item = (ActualItem) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
+                plan.addActualItem(item);
                 updateTotals();
             }
         }

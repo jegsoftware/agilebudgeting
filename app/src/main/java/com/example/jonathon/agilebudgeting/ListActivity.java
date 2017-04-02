@@ -129,7 +129,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
 
         intent.setAction(ACTION_EDIT);
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
-        intent.putExtra("com.example.jonathon.agilebudgeting.ITEM_ID", clickedItem.getItemId());
+        intent.putExtra("com.example.jonathon.agilebudgeting.ITEM", clickedItem);
         startActivityForResult(intent, requestCode);
     }
 

@@ -32,8 +32,7 @@ public class EditDepositActivity extends AppCompatActivity{
             deposit = null;
         }
         else if (action.equals(ACTION_EDIT)) {
-            long itemId = intent.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID", -1);
-            deposit = Deposit.createDeposit(itemId, new DBItemPersister());
+            deposit = (Deposit) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
             populateFields();
         }
 
@@ -98,11 +97,11 @@ public class EditDepositActivity extends AppCompatActivity{
             deposit.setAmount(amount);
             deposit.setAccount(acct);
         }
-        long depositId = deposit.persist();
+        deposit.persist();
 
         Intent returnIntent = new Intent();
 
-        returnIntent.putExtra("com.example.jonathon.agilebudgeting.ITEM_ID", depositId);
+        returnIntent.putExtra("com.example.jonathon.agilebudgeting.ITEM", deposit);
 
         setResult(RESULT_OK, returnIntent);
         finish();

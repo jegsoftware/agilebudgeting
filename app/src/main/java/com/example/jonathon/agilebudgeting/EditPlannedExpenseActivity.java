@@ -35,8 +35,7 @@ public class EditPlannedExpenseActivity extends AppCompatActivity {
             expense = null;
         }
         else if (action.equals(ACTION_EDIT)) {
-            long itemId = intent.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID", -1);
-            expense = PlannedItem.createItem(itemId, new DBItemPersister());
+            expense = (PlannedItem) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
             populateFields();
         }
 
@@ -91,11 +90,11 @@ public class EditPlannedExpenseActivity extends AppCompatActivity {
             expense.setAmount(amount);
             expense.setAccount(acct);
         }
-        long expenseID = expense.persist();
+        expense.persist();
 
         Intent returnIntent = new Intent();
 
-        returnIntent.putExtra("com.example.jonathon.agilebudgeting.ITEM_ID", expenseID);
+        returnIntent.putExtra("com.example.jonathon.agilebudgeting.ITEM", expense);
 
         setResult(RESULT_OK, returnIntent);
         finish();
