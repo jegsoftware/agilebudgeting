@@ -33,7 +33,7 @@ public class EditDepositActivity extends AppCompatActivity{
         }
         else if (action.equals(ACTION_EDIT)) {
             long itemId = intent.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID", -1);
-            deposit = Deposit.createDeposit(itemId);
+            deposit = Deposit.createDeposit(itemId, new DBItemPersister());
             populateFields();
         }
 
@@ -90,7 +90,7 @@ public class EditDepositActivity extends AppCompatActivity{
         String acct = acctField.getText().toString();
 
         if (null == deposit) {
-            deposit = Deposit.createDeposit(plan.getPlanId(), depositDate, desc, amount, acct);
+            deposit = Deposit.createDeposit(plan.getPlanId(), depositDate, desc, amount, acct, new DBItemPersister());
         }
         else {
             deposit.setDate(depositDate);

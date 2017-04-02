@@ -36,7 +36,7 @@ public class EditPlannedExpenseActivity extends AppCompatActivity {
         }
         else if (action.equals(ACTION_EDIT)) {
             long itemId = intent.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID", -1);
-            expense = PlannedItem.createItem(itemId);
+            expense = PlannedItem.createItem(itemId, new DBItemPersister());
             populateFields();
         }
 
@@ -84,7 +84,7 @@ public class EditPlannedExpenseActivity extends AppCompatActivity {
         String acct = acctField.getText().toString();
 
         if (null == expense) {
-            expense = PlannedItem.createItem(plan.getPlanId(), desc, amount, acct);
+            expense = PlannedItem.createItem(plan.getPlanId(), desc, amount, acct, new DBItemPersister());
         }
         else {
             expense.setDescription(desc);

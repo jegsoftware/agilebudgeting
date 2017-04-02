@@ -27,7 +27,7 @@ public class ActualItem extends Item {
         plannedItems = new ArrayList<PlannedItem>();
     }
 
-    public static ActualItem createActualItem(long planId, String date, String desc, double amt, String acct) {
+    public static ActualItem createActualItem(long planId, String date, String desc, double amt, String acct, IPersistItem persister) {
         ActualItem newActualItem = new ActualItem();
 
         newActualItem.setDate(date);
@@ -35,61 +35,33 @@ public class ActualItem extends Item {
         newActualItem.amount = amt;
         newActualItem.account = acct;
         newActualItem.planId = planId;
+        newActualItem.persister = persister;
 
         return newActualItem;
 
     }
 
-    public static ActualItem createActualItem(long itemID) {
-        ActualItem newActualItem = new ActualItem();
+    public static ActualItem createActualItem(long itemID, IPersistItem persister) {
+        Item retrievedItem = persister.retrieve(itemID);
+        ActualItem actualItem = new ActualItem();
+        actualItem.type = "ActualItem";
+        actualItem.setDate(retrievedItem.getDate());
+        actualItem.setDescription(retrievedItem.getDescription());
+        actualItem.setAmount(retrievedItem.getAmount());
+        actualItem.setAccount(retrievedItem.getAccount());
+        actualItem.setPlanId(retrievedItem.getPlanId());
+        actualItem.itemId = retrievedItem.getItemId();
+        actualItem.persister = persister;
 
+        populatePlannedItems(actualItem);
+
+        return actualItem;
+    }
+
+    private static void populatePlannedItems(ActualItem item) {
         AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String[] projection = {
-                AgileBudgetingContract.Items.COLUMN_NAME_DATE,
-                AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION,
-                AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT,
-                AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT,
-                AgileBudgetingContract.Items.COLUMN_NAME_PLANID,
-        };
-
-        String selection = AgileBudgetingContract.Items._ID + " = ?";
-        String[] selectionArgs = { String.valueOf(itemID) };
-
-        Cursor cursor = db.query(
-                AgileBudgetingContract.Items.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
-        cursor.moveToFirst();
-        String date = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_DATE));
-        String desc = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION));
-        double amt = cursor.getDouble(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT));
-        String acct = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT));
-        long planId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_PLANID));
-        cursor.close();
-
-        newActualItem.setDate(date);
-        newActualItem.description = desc;
-        newActualItem.amount = amt;
-        newActualItem.account = acct;
-        newActualItem.planId = planId;
-        newActualItem.itemId = itemID;
-        populatePlannedItems(db, newActualItem);
-
-        db.close();
-
-        return newActualItem;
-
-    }
-
-    private static void populatePlannedItems(SQLiteDatabase db, ActualItem item) {
         String[] projection = {
                 AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID
         };
@@ -110,35 +82,12 @@ public class ActualItem extends Item {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             long plannedItemId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Match.COLUMN_NAME_PLANNED_ID));
-            item.plannedItems.add(PlannedItem.createItem(plannedItemId));
+            item.plannedItems.add(PlannedItem.createItem(plannedItemId,item.persister));
             cursor.moveToNext();
         }
         cursor.close();
-
-    }
-
-    public long persist() {
-        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(AgileBudgetingContract.Items.COLUMN_NAME_PLANID, planId);
-        values.put(AgileBudgetingContract.Items.COLUMN_NAME_DATE, getDate());
-        values.put(AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION, description);
-        values.put(AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT, amount);
-        values.put(AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT, account);
-        values.put(AgileBudgetingContract.Items.COLUMN_NAME_TYPE, "ActualItem");
-
-        if (itemId == -1) {
-            itemId = db.insert(AgileBudgetingContract.Items.TABLE_NAME, null, values);
-        }
-        else {
-            String selection = AgileBudgetingContract.Items._ID + " = ?";
-            String[] selectionArgs = { String.valueOf(itemId) };
-
-            db.update(AgileBudgetingContract.Items.TABLE_NAME, values, selection, selectionArgs);
-        }
         db.close();
-        return itemId;
+
     }
 
     public void addPlannedItem(PlannedItem plannedItem) {

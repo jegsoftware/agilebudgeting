@@ -32,7 +32,7 @@ public class EditActualExpenseActivity extends AppCompatActivity {
             item = null;
         } else if (action.equals(ACTION_EDIT)) {
             long itemId = intent.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID", -1);
-            item = ActualItem.createActualItem(itemId);
+            item = ActualItem.createActualItem(itemId, new DBItemPersister());
             populateFields();
         }
 
@@ -118,7 +118,7 @@ public class EditActualExpenseActivity extends AppCompatActivity {
         String acct = acctField.getText().toString();
 
         if (null == item) {
-            item = ActualItem.createActualItem(plan.getPlanId(), actualExpenseDate, desc, amount, acct);
+            item = ActualItem.createActualItem(plan.getPlanId(), actualExpenseDate, desc, amount, acct, new DBItemPersister());
         } else {
             item.setDate(actualExpenseDate);
             item.setDescription(desc);

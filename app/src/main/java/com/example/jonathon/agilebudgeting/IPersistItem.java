@@ -5,6 +5,6 @@ package com.example.jonathon.agilebudgeting;
  */
 
 public interface IPersistItem {
-    void persist(Item item);
+    long persist(Item item);
     Item retrieve(long itemId);
 }

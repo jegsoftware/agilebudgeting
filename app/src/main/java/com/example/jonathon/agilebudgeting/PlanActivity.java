@@ -109,14 +109,14 @@ public class PlanActivity extends AppCompatActivity {
         if (requestCode == CREATE_PLANNED_EXPENSE) {
             if (resultCode == RESULT_OK) {
                 long expenseId = data.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID",-1);
-                plan.addPlannedItem(PlannedItem.createItem(expenseId));
+                plan.addPlannedItem(PlannedItem.createItem(expenseId, new DBItemPersister()));
                 updateTotals();
             }
         }
         else if (requestCode == CREATE_DEPOSIT) {
             if (resultCode == RESULT_OK) {
                 long depositId = data.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID",-1);
-                Deposit deposit = Deposit.createDeposit(depositId);
+                Deposit deposit = Deposit.createDeposit(depositId, new DBItemPersister());
                 plan.addDeposit(deposit);
                 updateTotals();
             }
@@ -124,7 +124,7 @@ public class PlanActivity extends AppCompatActivity {
         else if (requestCode == CREATE_ACTUAL_EXPENSE) {
             if (resultCode == RESULT_OK) {
                 long expenseId = data.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID",-1);
-                plan.addActualItem(ActualItem.createActualItem(expenseId));
+                plan.addActualItem(ActualItem.createActualItem(expenseId, new DBItemPersister()));
                 updateTotals();
             }
         }

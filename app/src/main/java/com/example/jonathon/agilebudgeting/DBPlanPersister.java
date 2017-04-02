@@ -138,15 +138,15 @@ public class DBPlanPersister implements IPersistPlan,Serializable {
             long itemId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Items._ID));
 
             if ("Deposit".equals(type)) {
-                Deposit deposit = Deposit.createDeposit(itemId);
+                Deposit deposit = Deposit.createDeposit(itemId, new DBItemPersister());
                 newPlan.addDeposit(deposit);
             }
             else if ("PlannedItem".equals(type)) {
-                PlannedItem plannedItem = PlannedItem.createItem(itemId);
+                PlannedItem plannedItem = PlannedItem.createItem(itemId, new DBItemPersister());
                 newPlan.addPlannedItem(plannedItem);
             }
             else if ("ActualItem".equals(type)) {
-                ActualItem actualItem = ActualItem.createActualItem(itemId);
+                ActualItem actualItem = ActualItem.createActualItem(itemId, new DBItemPersister());
                 newPlan.addActualItem(actualItem);
             }
 

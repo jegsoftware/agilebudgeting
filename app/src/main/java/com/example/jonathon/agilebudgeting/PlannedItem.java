@@ -25,86 +25,31 @@ public class PlannedItem extends Item {
         actualItems = new ArrayList<ActualItem>();
     }
 
-    public static PlannedItem createItem(long planId, String desc, double amt, String acct) {
+    public static PlannedItem createItem(long planId, String desc, double amt, String acct, IPersistItem persister) {
         PlannedItem newItem = new PlannedItem();
 
         newItem.setDescription(desc);
         newItem.setAmount(amt);
         newItem.setAccount(acct);
         newItem.setPlanId(planId);
+        newItem.persister = persister;
 
         return newItem;
     }
 
-    public static PlannedItem createItem(long itemID) {
-        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION,
-                AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT,
-                AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT,
-                AgileBudgetingContract.Items.COLUMN_NAME_PLANID,
-        };
-
-        String selection = AgileBudgetingContract.Items._ID + " = ?";
-        String[] selectionArgs = { String.valueOf(itemID) };
-
-        Cursor cursor = db.query(
-                AgileBudgetingContract.Items.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
-        cursor.moveToFirst();
-        String desc = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION));
-        double amt = cursor.getDouble(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT));
-        String acct = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT));
-        long planId = cursor.getLong(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_PLANID));
-
-        cursor.close();
-        db.close();
-
-        PlannedItem newItem = new PlannedItem();
-        newItem.setDescription(desc);
-        newItem.setAmount(amt);
-        newItem.setAccount(acct);
-        newItem.setPlanId(planId);
-        newItem.itemId = itemID;
-
-        return newItem;
+    public static PlannedItem createItem(long itemID, IPersistItem persister) {
+        Item retrievedItem = persister.retrieve(itemID);
+        PlannedItem plannedItem = new PlannedItem();
+        plannedItem.type = "PlannedItem";
+        plannedItem.setDescription(retrievedItem.getDescription());
+        plannedItem.setAmount(retrievedItem.getAmount());
+        plannedItem.setAccount(retrievedItem.getAccount());
+        plannedItem.setPlanId(retrievedItem.getPlanId());
+        plannedItem.itemId = retrievedItem.getItemId();
+        plannedItem.persister = persister;
+        return plannedItem;
     }
 
-
-    @Override
-    public long persist() {
-        AgileBudgetingDbHelper dbHelper = DbHelperSingleton.getInstance().getDbHelper();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(AgileBudgetingContract.Items.COLUMN_NAME_PLANID, planId);
-        values.put(AgileBudgetingContract.Items.COLUMN_NAME_DESCRIPTION, description);
-        values.put(AgileBudgetingContract.Items.COLUMN_NAME_AMOUNT, amount);
-        values.put(AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT, account);
-        values.put(AgileBudgetingContract.Items.COLUMN_NAME_TYPE, "PlannedItem");
-
-        if (itemId == -1) {
-            itemId = db.insert(AgileBudgetingContract.Items.TABLE_NAME, null, values);
-        }
-        else {
-            String selection = AgileBudgetingContract.Items._ID + " = ?";
-            String[] selectionArgs = { String.valueOf(itemId) };
-
-            db.update(AgileBudgetingContract.Items.TABLE_NAME, values, selection, selectionArgs);
-        }
-
-        db.close();
-
-        return itemId;
-    }
 
     public void addActualItem(ActualItem actualItem) {
         if ((null != actualItem) && !actualItems.contains(actualItem)) {

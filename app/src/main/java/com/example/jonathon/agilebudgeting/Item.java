@@ -1,6 +1,8 @@
 package com.example.jonathon.agilebudgeting;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.io.Serializable;
 
@@ -8,13 +10,15 @@ import java.io.Serializable;
  * Created by Jonathon on 1/7/2017.
  */
 
-public abstract class Item implements Serializable {
+public class Item implements Serializable {
     protected String description;
     protected double amount;
     protected String account; //TODO: Make account user-maintainable
     protected long itemId;
     protected long planId;
     protected String date;
+    protected IPersistItem persister;
+    protected String type;
 
     protected Item() {
         date = "";
@@ -64,9 +68,16 @@ public abstract class Item implements Serializable {
         this.date = date;
     }
 
-    public abstract long persist();
-
     public long getItemId() {
         return itemId;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public long persist() {
+        return persister.persist(this);
+    }
+
 }
