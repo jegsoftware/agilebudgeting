@@ -11,7 +11,7 @@ public class Item implements Serializable {
     protected String description;
     protected double amount;
     protected String account; //TODO: Make account user-maintainable
-    protected UUID itemId; 
+    protected UUID itemId;
     protected PlanningPeriod planPeriod;
     protected String date;
     protected IPersistItem persister;
