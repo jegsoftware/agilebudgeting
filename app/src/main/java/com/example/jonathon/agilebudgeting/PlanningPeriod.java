@@ -41,8 +41,8 @@ class PlanningPeriod implements Serializable {
     private void setDate(Calendar date)
     {
         int dayOfMonth = date.get(Calendar.DAY_OF_MONTH);
-        int month = date.get(Calendar.MONTH);
-        periodNumber = month * 2 + 1;
+        int month = date.get(Calendar.MONTH) + 1;  // Calendar object returns 0-based month
+        periodNumber = month * 2 - 1;
         if (dayOfMonth >= 15) {
             periodNumber++;
         }

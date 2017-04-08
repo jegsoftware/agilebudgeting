@@ -12,6 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import static org.junit.Assert.*;
@@ -28,229 +29,180 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class PlanTest {
 
-    @Mock private AgileBudgetingDbHelper dbHelperMock;
-    @Mock private SQLiteDatabase dbMock;
-    @Mock private Cursor planTableCursorMock;
-    @Mock private Cursor itemTableCursorMock;
-
-    private DbHelperSingleton singleton;
-    private final long planId = 1L;
     private final int periodNum = 3;
     private final int periodYear = 2017;
     private final String planningStatus = "OPEN";
     private final String actualsStatus = "OPEN";
 
+    private TestPlanPersister planPersister;
+
     @Before
     public void setup() {
-
-        MockitoAnnotations.initMocks(this);
-        singleton = DbHelperSingleton.getInstance();
-        when(dbHelperMock.getReadableDatabase()).thenReturn(dbMock);
-        when(dbHelperMock.getWritableDatabase()).thenReturn(dbMock);
-
-        Method method;
-        String methodName = "setDbHelper";
-
-        try {
-            method = DbHelperSingleton.class.getDeclaredMethod(methodName,AgileBudgetingDbHelper.class);
-            method.setAccessible(true);
-            method.invoke(singleton,dbHelperMock);
-            method.setAccessible(false);
-        }
-        catch (NoSuchMethodException e)  {
-            fail(e.toString());
-        }
-        catch (InvocationTargetException e) {
-            fail(e.toString());
-        }
-        catch (IllegalAccessException e) {
-            fail(e.toString());
-        }
-        setUpMockCursors();
-        setUpMockQuery();
-    }
-
-    private void setUpMockCursors() {
-        when(planTableCursorMock.getColumnIndex(AgileBudgetingContract.Plans._ID)).thenReturn(0);
-        when(planTableCursorMock.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_PLANNING_STATUS)).thenReturn(1);
-        when(planTableCursorMock.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_ACTUALS_STATUS)).thenReturn(2);
-        when(planTableCursorMock.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_PERIODNUM)).thenReturn(3);
-        when(planTableCursorMock.getColumnIndex(AgileBudgetingContract.Plans.COLUMN_NAME_PERIODYEAR)).thenReturn(4);
-
-        when(planTableCursorMock.moveToFirst()).thenReturn(true);
-        when(planTableCursorMock.getLong(0)).thenReturn(planId);
-        when(planTableCursorMock.getString(1)).thenReturn(planningStatus);
-        when(planTableCursorMock.getString(2)).thenReturn(actualsStatus);
-        when(planTableCursorMock.getInt(3)).thenReturn(periodNum);
-        when(planTableCursorMock.getInt(4)).thenReturn(periodYear);
-
-        when(itemTableCursorMock.moveToFirst()).thenReturn(true);
-        when(itemTableCursorMock.isAfterLast()).thenReturn(true);
-    }
-
-    private void setUpMockQuery() {
-        when(dbMock.query(
-                eq(AgileBudgetingContract.Plans.TABLE_NAME),
-                any(String[].class),
-                anyString(),
-                any(String[].class),
-                anyString(),
-                anyString(),
-                anyString()
-        )).thenReturn(planTableCursorMock);
-
-        when(dbMock.query(
-                eq(AgileBudgetingContract.Items.TABLE_NAME),
-                any(String[].class),
-                anyString(),
-                any(String[].class),
-                anyString(),
-                anyString(),
-                anyString()
-        )).thenReturn(itemTableCursorMock);
+        planPersister = new TestPlanPersister();
     }
 
     @Test
     public void createPlanFromDate() throws Exception {
-        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,2,7), new DBPlanPersister());
-        assertEquals(1L, testPlan.getPlanId());
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
+        assertEquals(periodNum, testPlan.getPeriod().getPeriodNumber());
+        assertEquals(periodYear, testPlan.getPeriod().getPeriodYear());
     }
 
     @Test
-    public void createPlanFromId() throws Exception {
-
-    }
-
-    @Test
-    public void getPlanId() throws Exception {
-        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,2,7), new DBPlanPersister());
-        assertEquals(1L, testPlan.getPlanId());
+    public void createPlanFromPeriod() throws Exception {
+        PlanningPeriod testPeriod = new PlanningPeriod(periodNum, periodYear);
+        Plan testPlan = Plan.createPlan(testPeriod, planPersister);
+        assertEquals(periodNum, testPlan.getPeriod().getPeriodNumber());
+        assertEquals(periodYear, testPlan.getPeriod().getPeriodYear());
     }
 
     @Test
     public void getPlanStartDate() throws Exception {
-        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,2,7), new DBPlanPersister());
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
         assertEquals("02/01/2017", testPlan.getPlanStartDate());
     }
 
     @Test
     public void setPeriod() throws Exception {
-
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,0,7), planPersister);
+        assertEquals("01/01/2017", testPlan.getPlanStartDate());
+        PlanningPeriod testPeriod = new PlanningPeriod(periodNum, periodYear);
+        testPlan.setPeriod(testPeriod);
+        assertEquals("02/01/2017", testPlan.getPlanStartDate());
     }
 
     @Test
-    public void setPeriod1() throws Exception {
-
+    public void setPeriodByCalendar() throws Exception {
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,0,7), planPersister);
+        assertEquals("01/01/2017", testPlan.getPlanStartDate());
+        testPlan.setPeriod(new GregorianCalendar(2017,1,7));
+        assertEquals("02/01/2017", testPlan.getPlanStartDate());
     }
 
     @Test
-    public void setPeriod2() throws Exception {
-
+    public void setPeriodByString() throws Exception {
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,0,5), planPersister);
+        assertEquals("01/01/2017", testPlan.getPlanStartDate());
+        testPlan.setPeriod("02/07/2017");
+        assertEquals("02/01/2017", testPlan.getPlanStartDate());
     }
 
     @Test
     public void getPeriod() throws Exception {
-
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
+        PlanningPeriod period = testPlan.getPeriod();
+        assertEquals(periodNum, testPlan.getPeriod().getPeriodNumber());
+        assertEquals(periodYear, testPlan.getPeriod().getPeriodYear());
     }
 
     @Test
-    public void openPlanning() throws Exception {
-
+    public void closeAndOpenPlanning() throws Exception {
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
+        assert(testPlan.isPlanningOpen());
+        assertFalse(testPlan.isPlanningClosed());
+        testPlan.closePlanning();
+        assert(testPlan.isPlanningClosed());
+        assertFalse(testPlan.isPlanningOpen());
+        testPlan.openPlanning();
+        assert(testPlan.isPlanningOpen());
+        assertFalse(testPlan.isPlanningClosed());
     }
 
     @Test
-    public void closePlanning() throws Exception {
-
+    public void closeandOpenActuals() throws Exception {
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
+        assert(testPlan.isActualsOpen());
+        assertFalse(testPlan.isActualsClosed());
+        testPlan.closeActuals();
+        assert(testPlan.isActualsClosed());
+        assertFalse(testPlan.isActualsOpen());
+        testPlan.openActuals();
+        assert(testPlan.isActualsOpen());
+        assertFalse(testPlan.isActualsClosed());
     }
 
     @Test
-    public void openActuals() throws Exception {
-
+    public void addAndTotalPlannedItems() throws Exception {
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
+        PlannedItem item1 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 1", 42.00, "Checking", new TestItemPersister());
+        testPlan.addPlannedItem(item1);
+        PlannedItem item2 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 2", 28.00, "Checking", new TestItemPersister());
+        testPlan.addPlannedItem(item2);
+        PlannedItem item3 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 3", 30.00, "Checking", new TestItemPersister());
+        testPlan.addPlannedItem(item3);
+        assertEquals(100.00, testPlan.getTotalPlannedExpenses(), 0.00);
     }
 
     @Test
-    public void closeActuals() throws Exception {
-
+    public void addAndTotalDeposits() throws Exception {
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
+        Deposit item1 = Deposit.createDeposit(testPlan.getPeriod(), "02/08/2017", "test deposit 1", 42.00, "Checking", new TestItemPersister());
+        testPlan.addDeposit(item1);
+        Deposit item2 = Deposit.createDeposit(testPlan.getPeriod(), "02/09/2017", "test deposit 2", 28.00, "Checking", new TestItemPersister());
+        testPlan.addDeposit(item2);
+        Deposit item3 = Deposit.createDeposit(testPlan.getPeriod(), "02/10/2017", "test deposit 3", 30.00, "Checking", new TestItemPersister());
+        testPlan.addDeposit(item3);
+        assertEquals(100.00, testPlan.getTotalDeposits(), 0.00);
     }
 
     @Test
-    public void addPlannedItem() throws Exception {
-
-    }
-
-    @Test
-    public void addDeposit() throws Exception {
-
-    }
-
-    @Test
-    public void addActualItem() throws Exception {
-
-    }
-
-    @Test
-    public void getTotalPlannedExpenses() throws Exception {
-
-    }
-
-    @Test
-    public void getTotalDeposits() throws Exception {
-
-    }
-
-    @Test
-    public void getTotalActualExpenses() throws Exception {
-
+    public void addAndTotalActualItems() throws Exception {
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
+        ActualItem item1 = ActualItem.createActualItem(testPlan.getPeriod(), "02/08/2017", "test Actual Item 1", 42.00, "Checking", new TestItemPersister());
+        testPlan.addActualItem(item1);
+        ActualItem item2 = ActualItem.createActualItem(testPlan.getPeriod(), "02/09/2017", "test Actual Item 2", 28.00, "Checking", new TestItemPersister());
+        testPlan.addActualItem(item2);
+        ActualItem item3 = ActualItem.createActualItem(testPlan.getPeriod(), "02/10/2017", "test Actual Item 3", 30.00, "Checking", new TestItemPersister());
+        testPlan.addActualItem(item3);
+        assertEquals(100.00, testPlan.getTotalActualExpenses(), 0.00);
     }
 
     @Test
     public void getNetPlannedAmount() throws Exception {
-
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
+        PlannedItem item1 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 1", 42.00, "Checking", new TestItemPersister());
+        testPlan.addPlannedItem(item1);
+        PlannedItem item2 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 2", 28.00, "Checking", new TestItemPersister());
+        testPlan.addPlannedItem(item2);
+        PlannedItem item3 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 3", 30.00, "Checking", new TestItemPersister());
+        testPlan.addPlannedItem(item3);
+        Deposit dep1 = Deposit.createDeposit(testPlan.getPeriod(), "02/08/2017", "test deposit 1", 42.00, "Checking", new TestItemPersister());
+        testPlan.addDeposit(dep1);
+        Deposit dep2 = Deposit.createDeposit(testPlan.getPeriod(), "02/09/2017", "test deposit 2", 68.00, "Checking", new TestItemPersister());
+        testPlan.addDeposit(dep2);
+        assertEquals(10.00,testPlan.getNetPlannedAmount(),0.00);
     }
 
     @Test
     public void getNetActualAmount() throws Exception {
-
-    }
-
-    @Test
-    public void getDeposits() throws Exception {
-
-    }
-
-    @Test
-    public void getPlannedItems() throws Exception {
-
-    }
-
-    @Test
-    public void isPlanningClosed() throws Exception {
-
-    }
-
-    @Test
-    public void isPlanningOpen() throws Exception {
-
-    }
-
-    @Test
-    public void isActualsClosed() throws Exception {
-
-    }
-
-    @Test
-    public void isActualsOpen() throws Exception {
-
-    }
-
-    @Test
-    public void getActualItems() throws Exception {
-
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
+        PlannedItem item1 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 1", 42.00, "Checking", new TestItemPersister());
+        testPlan.addPlannedItem(item1);
+        PlannedItem item2 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 2", 28.00, "Checking", new TestItemPersister());
+        testPlan.addPlannedItem(item2);
+        PlannedItem item3 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 3", 30.00, "Checking", new TestItemPersister());
+        testPlan.addPlannedItem(item3);
+        ActualItem actualItem1 = ActualItem.createActualItem(testPlan.getPeriod(), "02/08/2017", "test Actual Item 1", 42.00, "Checking", new TestItemPersister());
+        testPlan.addActualItem(actualItem1);
+        ActualItem actualItem2 = ActualItem.createActualItem(testPlan.getPeriod(), "02/09/2017", "test Actual Item 2", 25.00, "Checking", new TestItemPersister());
+        testPlan.addActualItem(actualItem2);
+        ActualItem actualItem3 = ActualItem.createActualItem(testPlan.getPeriod(), "02/10/2017", "test Actual Item 3", 32.00, "Checking", new TestItemPersister());
+        testPlan.addActualItem(actualItem3);
+        assertEquals(1.00,testPlan.getNetActualAmount(),0.00);
     }
 
     @Test
     public void getPlannedItemsForAccount() throws Exception {
-
+        Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
+        PlannedItem item1 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 1", 42.00, "Checking", new TestItemPersister());
+        testPlan.addPlannedItem(item1);
+        PlannedItem item2 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 2", 28.00, "Savings", new TestItemPersister());
+        testPlan.addPlannedItem(item2);
+        PlannedItem item3 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 3", 30.00, "Checking", new TestItemPersister());
+        testPlan.addPlannedItem(item3);
+        ArrayList<PlannedItem> checkingItems = testPlan.getPlannedItemsForAccount("Checking");
+        assertEquals(2, checkingItems.size());
+        assertEquals(1, testPlan.getPlannedItemsForAccount("Savings").size());
     }
 
 }
