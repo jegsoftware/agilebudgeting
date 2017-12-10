@@ -58,13 +58,8 @@ public class CloudItemPersister implements IPersistItem, Serializable {
     @Override
     public Item retrieve(UUID itemId) {
         Item retrievedItem = null;
-        JSONObject retrieveItemObject = new JSONObject();
         try {
-            retrieveItemObject.put("persistenceType", "loadItem");
-            JSONObject dataObject = new JSONObject();
-            dataObject.put("uuid", itemId.toString());
-            retrieveItemObject.put("data", dataObject);
-            JSONObject retrievedJSON = CloudCaller.sendJSON(retrieveItemObject);
+            JSONObject retrievedJSON = retrieveItemJSON(itemId);
 
             if (retrievedJSON != null) {
                 retrievedItem = new Item();
@@ -89,6 +84,29 @@ public class CloudItemPersister implements IPersistItem, Serializable {
 
     @Override
     public UUID[] retrieveRelatedItems(Item item) {
-        return new UUID[0];
+        UUID[] relatedItemIds = null;
+        try {
+            JSONObject retrievedJSON = retrieveItemJSON(item.getItemId());
+            if (retrievedJSON != null) {
+                JSONArray relatedItems = retrievedJSON.getJSONArray("relatedItems");
+                relatedItemIds = new UUID[relatedItems.length()];
+                for (int i = 0; i < relatedItems.length(); i++) {
+                    relatedItemIds[i] = UUID.fromString(relatedItems.getString(i));
+                }
+            }
+        } catch (JSONException e) {
+
+        }
+        return relatedItemIds;
     }
+
+    private JSONObject retrieveItemJSON(UUID itemId) throws JSONException {
+        JSONObject retrieveItemObject = new JSONObject();
+        retrieveItemObject.put("persistenceType", "loadItem");
+        JSONObject dataObject = new JSONObject();
+        dataObject.put("uuid", itemId.toString());
+        retrieveItemObject.put("data", dataObject);
+        return CloudCaller.sendJSON(retrieveItemObject);
+    }
+
 }
