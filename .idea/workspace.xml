@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2096803f-64c8-46d4-80eb-76dc0f73bd06" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/CloudCaller.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/CloudCaller.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/CloudItemPersister.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/CloudItemPersister.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/CloudPlanPersister.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/CloudPlanPersister.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/test/java/com/example/jonathon/agilebudgeting/CloudItemPersisterTest.java" afterPath="$PROJECT_DIR$/app/src/test/java/com/example/jonathon/agilebudgeting/CloudItemPersisterTest.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/classes/" />
@@ -44,31 +39,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CloudItemPersisterTest.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CloudItemPersisterTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/test/java/com/example/jonathon/agilebudgeting/CloudItemPersisterTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MatchActualToPlan.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/MatchActualToPlan.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-272">
-              <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PlannedItemTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/test/java/com/example/jonathon/agilebudgeting/PlannedItemTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
-              <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+            <state relative-caret-position="538">
+              <caret line="68" column="16" lean-forward="false" selection-start-line="68" selection-start-column="16" selection-end-line="68" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -94,15 +69,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CloudItemPersister.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CloudItemPersister.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/CloudItemPersister.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="65" column="55" lean-forward="false" selection-start-line="65" selection-start-column="55" selection-end-line="65" selection-end-column="55" />
-              <folding>
-                <element signature="e#3093#3094#0" expanded="true" />
-                <element signature="e#3127#3128#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="362">
+              <caret line="94" column="17" lean-forward="false" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1739,8 +1711,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/CloudPlanPersister.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/CloudCaller.java" />
         <option value="$PROJECT_DIR$/app/src/test/java/com/example/jonathon/agilebudgeting/CloudItemPersisterTest.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/CloudItemPersister.java" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/CloudItemPersister.java" />
       </list>
     </option>
   </component>
@@ -1839,6 +1811,7 @@
   <component name="PropertiesComponent">
     <property name="device.picker.selection" value="Nexus_5X_API_27" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/.gitignore" />
+    <property name="extract.method.default.visibility" value="private" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -1852,7 +1825,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Android JUnit.CloudItemPersisterTest.retrieve">
+  <component name="RunManager" selected="Android JUnit.CloudItemPersisterTest.retrieveRelatedItems">
     <configuration default="false" name="CloudItemPersisterTest.persistRelationship" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -1957,6 +1930,32 @@
       <patterns />
       <method />
     </configuration>
+    <configuration default="false" name="CloudItemPersisterTest.retrieveRelatedItems" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.example.jonathon.agilebudgeting.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="app" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.example.jonathon.agilebudgeting" />
+      <option name="MAIN_CLASS_NAME" value="com.example.jonathon.agilebudgeting.CloudItemPersisterTest" />
+      <option name="METHOD_NAME" value="retrieveRelatedItems" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -2027,7 +2026,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512873866070" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512874881339" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2075,7 +2074,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512873866070" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512874881340" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2258,22 +2257,24 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512873866071" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512874881340" />
       </method>
     </configuration>
-    <list size="5">
+    <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Android App.app" />
       <item index="1" class="java.lang.String" itemvalue="Android JUnit.CloudItemPersisterTest.persistRelationship" />
       <item index="2" class="java.lang.String" itemvalue="Android JUnit.CloudPlanPersisterTest" />
       <item index="3" class="java.lang.String" itemvalue="Android JUnit.CloudItemPersisterTest" />
       <item index="4" class="java.lang.String" itemvalue="Android JUnit.CloudItemPersisterTest.retrieve" />
+      <item index="5" class="java.lang.String" itemvalue="Android JUnit.CloudItemPersisterTest.retrieveRelatedItems" />
     </list>
     <recent_temporary>
-      <list size="4">
-        <item index="0" class="java.lang.String" itemvalue="Android JUnit.CloudItemPersisterTest.retrieve" />
-        <item index="1" class="java.lang.String" itemvalue="Android JUnit.CloudItemPersisterTest.persistRelationship" />
-        <item index="2" class="java.lang.String" itemvalue="Android JUnit.CloudItemPersisterTest" />
-        <item index="3" class="java.lang.String" itemvalue="Android JUnit.CloudPlanPersisterTest" />
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="Android JUnit.CloudItemPersisterTest.retrieveRelatedItems" />
+        <item index="1" class="java.lang.String" itemvalue="Android JUnit.CloudItemPersisterTest.retrieve" />
+        <item index="2" class="java.lang.String" itemvalue="Android JUnit.CloudItemPersisterTest.persistRelationship" />
+        <item index="3" class="java.lang.String" itemvalue="Android JUnit.CloudItemPersisterTest" />
+        <item index="4" class="java.lang.String" itemvalue="Android JUnit.CloudPlanPersisterTest" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
@@ -2312,9 +2313,6 @@
     <history-entry file="CloudItemPersisterTest - 2017.12.09 at 19h 03m 52s.xml">
       <configuration name="CloudItemPersisterTest" configurationId="AndroidJUnit" />
     </history-entry>
-    <history-entry file="CloudItemPersisterTest_persistRelationship - 2017.12.09 at 18h 47m 18s.xml">
-      <configuration name="CloudItemPersisterTest.persistRelationship" configurationId="AndroidJUnit" />
-    </history-entry>
     <history-entry file="CloudItemPersisterTest_persistRelationship - 2017.12.09 at 19h 11m 53s.xml">
       <configuration name="CloudItemPersisterTest.persistRelationship" configurationId="AndroidJUnit" />
     </history-entry>
@@ -2332,6 +2330,12 @@
     </history-entry>
     <history-entry file="CloudItemPersisterTest_retrieve - 2017.12.09 at 20h 37m 39s.xml">
       <configuration name="CloudItemPersisterTest.retrieve" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="CloudItemPersisterTest_retrieveRelatedItems - 2017.12.09 at 20h 46m 50s.xml">
+      <configuration name="CloudItemPersisterTest.retrieveRelatedItems" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="CloudItemPersisterTest_retrieveRelatedItems - 2017.12.09 at 21h 01m 00s.xml">
+      <configuration name="CloudItemPersisterTest.retrieveRelatedItems" configurationId="AndroidJUnit" />
     </history-entry>
     <history-entry file="CloudPlanPersisterTest - 2017.12.09 at 19h 02m 50s.xml">
       <configuration name="CloudPlanPersisterTest" configurationId="AndroidJUnit" />
@@ -2514,14 +2518,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/example/jonathon/agilebudgeting/CloudItemPersisterTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/CloudPlanPersister.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-118">
@@ -2556,12 +2552,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/jonathon/agilebudgeting/CloudItemPersister.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="65" column="55" lean-forward="false" selection-start-line="65" selection-start-column="55" selection-end-line="65" selection-end-column="55" />
-          <folding>
-            <element signature="e#3093#3094#0" expanded="true" />
-            <element signature="e#3127#3128#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="362">
+          <caret line="94" column="17" lean-forward="false" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/test/java/com/example/jonathon/agilebudgeting/CloudItemPersisterTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="538">
+          <caret line="68" column="16" lean-forward="false" selection-start-line="68" selection-start-column="16" selection-end-line="68" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
