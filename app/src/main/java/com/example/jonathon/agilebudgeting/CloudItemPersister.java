@@ -1,5 +1,9 @@
 package com.example.jonathon.agilebudgeting;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -10,17 +14,77 @@ import java.util.UUID;
 public class CloudItemPersister implements IPersistItem, Serializable {
     @Override
     public void persist(Item item) {
+        JSONObject saveItemObject = new JSONObject();
+        try {
+            saveItemObject.put("persistenceType", "saveItem");
+            JSONObject dataObject = new JSONObject();
+
+
+            dataObject.put("uuid", item.getItemId());
+            dataObject.put("periodNum", item.getPlanPeriod().getPeriodNumber());
+            dataObject.put("periodYear", item.getPlanPeriod().getPeriodYear());
+            dataObject.put("date", item.getDate());
+            dataObject.put("description", item.getDescription());
+            dataObject.put("amount", item.getAmountString());
+            dataObject.put("account", item.getAccount());
+            dataObject.put("type", item.getType());
+
+            saveItemObject.put("data", dataObject);
+            CloudCaller.sendJSON(saveItemObject);
+        } catch (JSONException e) {
+
+        }
 
     }
 
     @Override
     public void persistRelationship(Item item1, Item item2) {
+        JSONObject saveItemObject = new JSONObject();
+        try {
+            saveItemObject.put("persistenceType", "saveItemRelationship");
+            JSONObject dataObject = new JSONObject();
 
+
+            dataObject.put("uuid1", item1.getItemId());
+            dataObject.put("uuid2", item2.getItemId());
+
+            saveItemObject.put("data", dataObject);
+            CloudCaller.sendJSON(saveItemObject);
+        } catch (JSONException e) {
+
+        }
     }
 
     @Override
     public Item retrieve(UUID itemId) {
-        return null;
+        Item retrievedItem = null;
+        JSONObject retrieveItemObject = new JSONObject();
+        try {
+            retrieveItemObject.put("persistenceType", "loadItem");
+            JSONObject dataObject = new JSONObject();
+            dataObject.put("uuid", itemId.toString());
+            retrieveItemObject.put("data", dataObject);
+            JSONObject retrievedJSON = CloudCaller.sendJSON(retrieveItemObject);
+
+            if (retrievedJSON != null) {
+                retrievedItem = new Item();
+
+                int periodNum = retrievedJSON.getInt("periodNum");
+                int periodYear = retrievedJSON.getInt("periodYear");
+                retrievedItem.planPeriod = new PlanningPeriod(periodNum,periodYear);
+
+                retrievedItem.description = retrievedJSON.getString("description");
+                retrievedItem.account = retrievedJSON.getString("account");
+                retrievedItem.amount = retrievedJSON.getDouble("amount");
+                retrievedItem.date = retrievedJSON.getString("date");
+                retrievedItem.itemId = itemId;
+                retrievedItem.persister = this;
+            }
+
+        } catch (JSONException e) {
+
+        }
+        return retrievedItem;
     }
 
     @Override

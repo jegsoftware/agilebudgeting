@@ -33,7 +33,7 @@ public class CloudPlanPersister implements IPersistPlan, Serializable {
             dataObject.put("planningStatus", planningStatus.name());
             dataObject.put("actualsStatus", actualsStatus.name());
             savePlanObject.put("data", dataObject);
-            sendJSON(savePlanObject);
+            CloudCaller.sendJSON(savePlanObject);
         } catch (JSONException e) {
 
         }
@@ -49,7 +49,7 @@ public class CloudPlanPersister implements IPersistPlan, Serializable {
             dataObject.put("periodNum", period.getPeriodNumber());
             dataObject.put("periodYear", period.getPeriodYear());
             getPlanObject.put("data", dataObject);
-            JSONObject retrievedPlan = sendJSON(getPlanObject);
+            JSONObject retrievedPlan = CloudCaller.sendJSON(getPlanObject);
 
             if (retrievedPlan != null) {
                 String planningStatusString = retrievedPlan.getString("planningStatus");
@@ -69,33 +69,4 @@ public class CloudPlanPersister implements IPersistPlan, Serializable {
         return newPlan;
     }
 
-    private JSONObject sendJSON(JSONObject objectToSend) {
-        HttpURLConnection connection = null;
-        String sendData = objectToSend.toString();
-        JSONObject retObject = null;
-        try {
-            URL persistenceURL = new URL("https://us-central1-arcane-antler-164801.cloudfunctions.net/agile-budgeting-persistence");
-            connection = (HttpURLConnection) persistenceURL.openConnection();
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setDoOutput(true);
-            connection.setFixedLengthStreamingMode(sendData.length());
-            OutputStream out = connection.getOutputStream();
-            out.write(sendData.getBytes("UTF-8"));
-
-            InputStream in = connection.getInputStream();
-            ByteArrayOutputStream result = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = in.read(buffer)) != -1) {
-                result.write(buffer, 0, length);
-            }
-            String response = result.toString("UTF-8");
-            retObject = new JSONObject(response);
-        } catch (Exception e) {
-            retObject = null;
-        } finally {
-            if (connection != null) connection.disconnect();
-        }
-        return retObject;
-    }
 }
