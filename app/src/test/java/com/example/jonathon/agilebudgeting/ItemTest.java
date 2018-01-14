@@ -8,17 +8,17 @@ import static org.junit.Assert.*;
 /**
  * Created by Jonathon on 4/8/2017.
  */
-public class PlannedItemTest {
+public class ItemTest {
 
     private TestItemPersister itemPersister;
-    private PlannedItem testItem;
+    private Item testItem;
     private PlanningPeriod period;
 
     @Before
     public void setUp() {
         itemPersister = new TestItemPersister();
         period = new PlanningPeriod(1,2017);
-        testItem = PlannedItem.createItem(period,"Test item", 42.00, "Checking", itemPersister);
+        testItem = Item.createItem(period,"Test item", 42.00, "Checking", itemPersister);
     }
 
     @Test

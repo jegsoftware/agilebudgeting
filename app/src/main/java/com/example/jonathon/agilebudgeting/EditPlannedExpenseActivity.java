@@ -18,7 +18,7 @@ import static android.content.Intent.ACTION_VIEW;
 public class EditPlannedExpenseActivity extends AppCompatActivity {
 
     private Plan plan;
-    private PlannedItem expense;
+    private Item expense;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class EditPlannedExpenseActivity extends AppCompatActivity {
             expense = null;
         }
         else if (action.equals(ACTION_EDIT)) {
-            expense = (PlannedItem) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
+            expense = (Item) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
             populateFields();
         }
 
@@ -83,7 +83,7 @@ public class EditPlannedExpenseActivity extends AppCompatActivity {
         String acct = acctField.getText().toString();
 
         if (null == expense) {
-            expense = PlannedItem.createItem(plan.getPeriod(), desc, amount, acct, new DBItemPersister());
+            expense = Item.createItem(plan.getPeriod(), desc, amount, acct, new DBItemPersister());
         }
         else {
             expense.setDescription(desc);

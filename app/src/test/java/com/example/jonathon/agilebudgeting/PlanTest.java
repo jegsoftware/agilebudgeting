@@ -124,11 +124,11 @@ public class PlanTest {
     @Test
     public void addAndTotalPlannedItems() throws Exception {
         Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
-        PlannedItem item1 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 1", 42.00, "Checking", new TestItemPersister());
+        Item item1 = Item.createItem(testPlan.getPeriod(), "test planned item 1", 42.00, "Checking", new TestItemPersister());
         testPlan.addPlannedItem(item1);
-        PlannedItem item2 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 2", 28.00, "Checking", new TestItemPersister());
+        Item item2 = Item.createItem(testPlan.getPeriod(), "test planned item 2", 28.00, "Checking", new TestItemPersister());
         testPlan.addPlannedItem(item2);
-        PlannedItem item3 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 3", 30.00, "Checking", new TestItemPersister());
+        Item item3 = Item.createItem(testPlan.getPeriod(), "test planned item 3", 30.00, "Checking", new TestItemPersister());
         testPlan.addPlannedItem(item3);
         assertEquals(100.00, testPlan.getTotalPlannedExpenses(), 0.00);
     }
@@ -160,11 +160,11 @@ public class PlanTest {
     @Test
     public void getNetPlannedAmount() throws Exception {
         Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
-        PlannedItem item1 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 1", 42.00, "Checking", new TestItemPersister());
+        Item item1 = Item.createItem(testPlan.getPeriod(), "test planned item 1", 42.00, "Checking", new TestItemPersister());
         testPlan.addPlannedItem(item1);
-        PlannedItem item2 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 2", 28.00, "Checking", new TestItemPersister());
+        Item item2 = Item.createItem(testPlan.getPeriod(), "test planned item 2", 28.00, "Checking", new TestItemPersister());
         testPlan.addPlannedItem(item2);
-        PlannedItem item3 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 3", 30.00, "Checking", new TestItemPersister());
+        Item item3 = Item.createItem(testPlan.getPeriod(), "test planned item 3", 30.00, "Checking", new TestItemPersister());
         testPlan.addPlannedItem(item3);
         Deposit dep1 = Deposit.createDeposit(testPlan.getPeriod(), "02/08/2017", "test deposit 1", 42.00, "Checking", new TestItemPersister());
         testPlan.addDeposit(dep1);
@@ -176,11 +176,11 @@ public class PlanTest {
     @Test
     public void getNetActualAmount() throws Exception {
         Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
-        PlannedItem item1 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 1", 42.00, "Checking", new TestItemPersister());
+        Item item1 = Item.createItem(testPlan.getPeriod(), "test planned item 1", 42.00, "Checking", new TestItemPersister());
         testPlan.addPlannedItem(item1);
-        PlannedItem item2 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 2", 28.00, "Checking", new TestItemPersister());
+        Item item2 = Item.createItem(testPlan.getPeriod(), "test planned item 2", 28.00, "Checking", new TestItemPersister());
         testPlan.addPlannedItem(item2);
-        PlannedItem item3 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 3", 30.00, "Checking", new TestItemPersister());
+        Item item3 = Item.createItem(testPlan.getPeriod(), "test planned item 3", 30.00, "Checking", new TestItemPersister());
         testPlan.addPlannedItem(item3);
         ActualItem actualItem1 = ActualItem.createActualItem(testPlan.getPeriod(), "02/08/2017", "test Actual Item 1", 42.00, "Checking", new TestItemPersister());
         testPlan.addActualItem(actualItem1);
@@ -194,13 +194,13 @@ public class PlanTest {
     @Test
     public void getPlannedItemsForAccount() throws Exception {
         Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
-        PlannedItem item1 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 1", 42.00, "Checking", new TestItemPersister());
+        Item item1 = Item.createItem(testPlan.getPeriod(), "test planned item 1", 42.00, "Checking", new TestItemPersister());
         testPlan.addPlannedItem(item1);
-        PlannedItem item2 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 2", 28.00, "Savings", new TestItemPersister());
+        Item item2 = Item.createItem(testPlan.getPeriod(), "test planned item 2", 28.00, "Savings", new TestItemPersister());
         testPlan.addPlannedItem(item2);
-        PlannedItem item3 = PlannedItem.createItem(testPlan.getPeriod(), "test planned item 3", 30.00, "Checking", new TestItemPersister());
+        Item item3 = Item.createItem(testPlan.getPeriod(), "test planned item 3", 30.00, "Checking", new TestItemPersister());
         testPlan.addPlannedItem(item3);
-        ArrayList<PlannedItem> checkingItems = testPlan.getPlannedItemsForAccount("Checking");
+        ArrayList<Item> checkingItems = testPlan.getPlannedItemsForAccount("Checking");
         assertEquals(2, checkingItems.size());
         assertEquals(1, testPlan.getPlannedItemsForAccount("Savings").size());
     }

@@ -108,7 +108,7 @@ public class PlanActivity extends AppCompatActivity {
 
         if (requestCode == CREATE_PLANNED_EXPENSE) {
             if (resultCode == RESULT_OK) {
-                PlannedItem item = (PlannedItem) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
+                Item item = (Item) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
                 plan.addPlannedItem(item);
                 updateTotals();
             }

@@ -33,8 +33,8 @@ public class MatchActualToPlan extends AppCompatActivity {
     }
 
     private void populateList() {
-        List<PlannedItem> possibleMatches = plan.getPlannedItemsForAccount(actualItem.getAccount());
-        Iterator<PlannedItem> iter = possibleMatches.iterator();
+        List<Item> possibleMatches = plan.getPlannedItemsForAccount(actualItem.getAccount());
+        Iterator<Item> iter = possibleMatches.iterator();
 
         LinearLayout listView = (LinearLayout) findViewById(R.id.matchingItemsList);
 
@@ -42,7 +42,7 @@ public class MatchActualToPlan extends AppCompatActivity {
             LinearLayout itemView = new LinearLayout(listView.getContext());
             itemView.setOrientation(LinearLayout.HORIZONTAL);
 
-            PlannedItem curItem = iter.next();
+            Item curItem = iter.next();
 
             String itemText = curItem.getDescription() + " $" + curItem.getAmountString() + " " + curItem.getAccount();
             CheckBox checkBox = new CheckBox(itemView.getContext());
@@ -71,7 +71,7 @@ public class MatchActualToPlan extends AppCompatActivity {
             if(checkBox.isChecked()) {
                 TextView itemIdText = (TextView) itemView.getChildAt(1);
                 UUID plannedItemId = UUID.fromString(itemIdText.getText().toString());
-                PlannedItem plannedItem = PlannedItem.createItem(plannedItemId, new DBItemPersister());
+                Item plannedItem = Item.createItem(plannedItemId, new DBItemPersister());
 
                 actualItem.addPlannedItem(plannedItem);
             }

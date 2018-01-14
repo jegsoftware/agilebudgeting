@@ -1,5 +1,6 @@
 package com.example.jonathon.agilebudgeting;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,6 +12,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.UUID;
 
 
 /**
@@ -61,12 +63,33 @@ public class CloudPlanPersister implements IPersistPlan, Serializable {
                 if (PlanStatus.CLOSED == PlanStatus.valueOf(actualsStatusString)) {
                     newPlan.closeActuals();
                 }
+                populateItems(newPlan, retrievedPlan.getJSONArray("items"));
             }
 
         } catch (JSONException e) {
 
         }
         return newPlan;
+    }
+
+    private void populateItems(Plan newPlan, JSONArray items) throws JSONException {
+        for (int i = 0; i < items.length(); i++) {
+            JSONObject itemJSON = items.getJSONObject(i);
+            String type = itemJSON.getString("type");
+            String itemIdStr = itemJSON.getString("uuid");
+            UUID itemId = UUID.fromString(itemIdStr);
+
+            if ("Deposit".equals(type)) {
+                Deposit deposit = Deposit.createDeposit(itemId, new CloudItemPersister());
+                newPlan.addDeposit(deposit);
+            } else if ("PlannedItem".equals(type)) {
+                Item plannedItem = Item.createItem(itemId, new CloudItemPersister());
+                newPlan.addPlannedItem(plannedItem);
+            } else if ("ActualItem".equals(type)) {
+                ActualItem actualItem = ActualItem.createActualItem(itemId, new CloudItemPersister());
+                newPlan.addActualItem(actualItem);
+            }
+        }
     }
 
 }

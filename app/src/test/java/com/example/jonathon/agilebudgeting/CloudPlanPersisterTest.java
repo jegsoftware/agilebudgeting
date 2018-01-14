@@ -25,6 +25,9 @@ public class CloudPlanPersisterTest {
     public void populate() throws Exception {
         Plan testPlan = Plan.createPlan(new PlanningPeriod(1,2017), persister);
         assertTrue(testPlan.isPlanningClosed());
+        assertEquals(2, testPlan.getActualItems().size());
+        assertEquals(1, testPlan.getPlannedItems().size());
+        assertEquals(1, testPlan.getDeposits().size());
         Plan testNonExistentPlan = Plan.createPlan(new PlanningPeriod(42,4242), persister);
         assertTrue(testNonExistentPlan.isPlanningOpen());
     }

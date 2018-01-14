@@ -16,7 +16,7 @@ public class Plan implements Serializable {
     private PlanStatus planningStatus;
     private PlanStatus actualsStatus;
     private PlanningPeriod period;
-    private ArrayList<PlannedItem> plannedItems;
+    private ArrayList<Item> plannedItems;
     private ArrayList<Deposit> deposits;
     private PlanningPeriod planId;
     private ArrayList<ActualItem> actualItems;
@@ -29,7 +29,7 @@ public class Plan implements Serializable {
         amountToSavings = 0;
         planningStatus = PlanStatus.OPEN;
         actualsStatus = PlanStatus.OPEN;
-        plannedItems = new ArrayList<PlannedItem>();
+        plannedItems = new ArrayList<Item>();
         deposits = new ArrayList<Deposit>();
         actualItems = new ArrayList<ActualItem>();
         initializing = true;
@@ -94,7 +94,7 @@ public class Plan implements Serializable {
         persist();
     }
 
-    public void addPlannedItem(PlannedItem item) {
+    public void addPlannedItem(Item item) {
         plannedItems.add(item);
         persist();
     }
@@ -111,7 +111,7 @@ public class Plan implements Serializable {
 
     public double getTotalPlannedExpenses() {
         double totalExpenses = 0.00;
-        for (PlannedItem item: plannedItems) {
+        for (Item item: plannedItems) {
             totalExpenses += item.getAmount();
         }
         return totalExpenses;
@@ -151,7 +151,7 @@ public class Plan implements Serializable {
         return deposits;
     }
 
-    public ArrayList<PlannedItem> getPlannedItems() {
+    public ArrayList<Item> getPlannedItems() {
         return plannedItems;
     }
 
@@ -173,11 +173,11 @@ public class Plan implements Serializable {
 
     public ArrayList<ActualItem> getActualItems() { return actualItems; }
 
-    public ArrayList<PlannedItem> getPlannedItemsForAccount(final String account) {
-        ArrayList<PlannedItem> accountItems = new ArrayList<PlannedItem>();
-        Iterator<PlannedItem> iter = plannedItems.iterator();
+    public ArrayList<Item> getPlannedItemsForAccount(final String account) {
+        ArrayList<Item> accountItems = new ArrayList<Item>();
+        Iterator<Item> iter = plannedItems.iterator();
         while (iter.hasNext()) {
-            PlannedItem curItem = iter.next();
+            Item curItem = iter.next();
             if (account.equals(curItem.getAccount())) {
                 accountItems.add(curItem);
             }

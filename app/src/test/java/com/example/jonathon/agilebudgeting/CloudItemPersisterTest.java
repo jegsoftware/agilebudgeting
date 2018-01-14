@@ -31,7 +31,7 @@ public class CloudItemPersisterTest {
 
     @Test
     public void persistRelationship() throws Exception {
-        PlannedItem testPlanned = PlannedItem.createItem(
+        Item testPlanned = Item.createItem(
                                     new PlanningPeriod(20, 2017),
                                     "Test planned item for two actuals",
                                     100.00,
@@ -60,14 +60,16 @@ public class CloudItemPersisterTest {
 
     @Test
     public void retrieve() throws Exception {
-        PlannedItem testPlanned = PlannedItem.createItem(UUID.fromString("206ed56e-8829-4d41-b1dd-321664f30f31"), persister);
+        Item testPlanned = Item.createItem(UUID.fromString("206ed56e-8829-4d41-b1dd-321664f30f31"), persister);
         assertEquals(testPlanned.getAccount(), "Checking");
         assertEquals(testPlanned.getAmount(), 100.00, 0.00);
+        ActualItem testActual = ActualItem.createActualItem(UUID.fromString("afc6ed6f-4e6d-4ac2-bcd5-78340eb83764"), persister);
+        assertTrue(testActual.hasMatch(testPlanned));
     }
 
     @Test
     public void retrieveRelatedItems() throws Exception {
-        PlannedItem testPlanned = PlannedItem.createItem(UUID.fromString("206ed56e-8829-4d41-b1dd-321664f30f31"), persister);
+        Item testPlanned = Item.createItem(UUID.fromString("206ed56e-8829-4d41-b1dd-321664f30f31"), persister);
         ActualItem testActual = ActualItem.createActualItem(UUID.fromString("afc6ed6f-4e6d-4ac2-bcd5-78340eb83764"), persister);
         assertTrue(testActual.hasMatch(testPlanned));
     }

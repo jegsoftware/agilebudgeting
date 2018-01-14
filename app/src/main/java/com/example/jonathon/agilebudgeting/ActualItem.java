@@ -10,14 +10,14 @@ import java.util.UUID;
 
 public class ActualItem extends Item {
 
-    private ArrayList<PlannedItem> plannedItems;
+    private ArrayList<Item> plannedItems;
 
     private ActualItem() {
         super();
         description = "";
         amount = 0;
         account = "";
-        plannedItems = new ArrayList<PlannedItem>();
+        plannedItems = new ArrayList<Item>();
     }
 
     public static ActualItem createActualItem(PlanningPeriod planId, String date, String desc, double amt, String acct, IPersistItem persister) {
@@ -57,11 +57,11 @@ public class ActualItem extends Item {
     private static void populatePlannedItems(ActualItem item) {
         UUID[] itemIds = item.persister.retrieveRelatedItems(item);
         for (int i = 0; i < itemIds.length; i++) {
-            item.plannedItems.add(PlannedItem.createItem(itemIds[i],item.persister));
+            item.plannedItems.add(Item.createItem(itemIds[i],item.persister));
         }
     }
 
-    public void addPlannedItem(PlannedItem plannedItem) {
+    public void addPlannedItem(Item plannedItem) {
         if ((null != plannedItem) && !isMatchedTo(plannedItem)) {
             plannedItems.add(plannedItem);
             plannedItem.addActualItem(this);
@@ -69,19 +69,19 @@ public class ActualItem extends Item {
         }
     }
 
-    private boolean isMatchedTo(PlannedItem plannedItem) {
+    private boolean isMatchedTo(Item plannedItem) {
         if (plannedItems.contains(plannedItem)) return true;
         return hasMatch(plannedItem);
     }
 
-    private void saveRelationship(PlannedItem plannedItem) {
+    private void saveRelationship(Item plannedItem) {
         persister.persistRelationship(this, plannedItem);
     }
 
-    public boolean hasMatch(PlannedItem item) {
-        Iterator<PlannedItem> iter = plannedItems.iterator();
+    public boolean hasMatch(Item item) {
+        Iterator<Item> iter = plannedItems.iterator();
         while (iter.hasNext()) {
-            PlannedItem curItem = iter.next();
+            Item curItem = iter.next();
             if (item.getItemId().equals(curItem.getItemId())) {
                 return true;
             }

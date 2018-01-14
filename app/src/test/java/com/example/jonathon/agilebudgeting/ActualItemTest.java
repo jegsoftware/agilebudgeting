@@ -66,7 +66,7 @@ public class ActualItemTest {
 
     @Test
     public void addPlannedItem() throws Exception {
-        PlannedItem relatedItem = PlannedItem.createItem(period, "Test description", 22.00, "Checking", itemPersister);
+        Item relatedItem = Item.createItem(period, "Test description", 22.00, "Checking", itemPersister);
         testItem.addPlannedItem(relatedItem);
         assert(testItem.hasMatch(relatedItem));
     }

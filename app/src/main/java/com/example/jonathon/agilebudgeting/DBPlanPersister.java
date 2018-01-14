@@ -146,7 +146,7 @@ public class DBPlanPersister implements IPersistPlan,Serializable {
                 newPlan.addDeposit(deposit);
             }
             else if ("PlannedItem".equals(type)) {
-                PlannedItem plannedItem = PlannedItem.createItem(itemId, new DBItemPersister());
+                Item plannedItem = Item.createItem(itemId, new DBItemPersister());
                 newPlan.addPlannedItem(plannedItem);
             }
             else if ("ActualItem".equals(type)) {

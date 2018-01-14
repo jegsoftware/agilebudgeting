@@ -1,6 +1,7 @@
 package com.example.jonathon.agilebudgeting;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -16,10 +17,35 @@ public class Item implements Serializable {
     protected String date;
     protected IPersistItem persister;
     protected String type;
+    protected ArrayList<ActualItem> actualItems;
 
     protected Item() {
         date = "";
+        actualItems = new ArrayList<ActualItem>();
     }
+
+    public static Item createItem(PlanningPeriod planId, String desc, double amt, String acct, IPersistItem persister) {
+        Item newItem = new Item();
+
+        newItem.setDescription(desc);
+        newItem.setAmount(amt);
+        newItem.setAccount(acct);
+        newItem.setPlanPeriod(planId);
+        newItem.persister = persister;
+        newItem.type = "PlannedItem";
+        newItem.itemId = UUID.randomUUID();
+        persister.persist(newItem);
+
+        return newItem;
+    }
+
+    public static Item createItem(UUID itemID, IPersistItem persister) {
+        Item retrievedItem = persister.retrieve(itemID);
+
+        retrievedItem.persister = persister;
+        return retrievedItem;
+    }
+
 
     public String getDescription() {
         return description;
@@ -77,4 +103,10 @@ public class Item implements Serializable {
         persister.persist(this);
     }
 
+    public void addActualItem(ActualItem actualItem) {
+        if ((null != actualItem) && !actualItems.contains(actualItem)) {
+            actualItems.add(actualItem);
+            actualItem.addPlannedItem(this);
+        }
+    }
 }
