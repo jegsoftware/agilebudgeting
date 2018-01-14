@@ -67,7 +67,7 @@ public class CloudItemPersister implements IPersistItem, Serializable {
                 int periodNum = retrievedJSON.getInt("periodNum");
                 int periodYear = retrievedJSON.getInt("periodYear");
                 retrievedItem.planPeriod = new PlanningPeriod(periodNum,periodYear);
-
+                retrievedItem.type = retrievedJSON.getString("type");
                 retrievedItem.description = retrievedJSON.getString("description");
                 retrievedItem.account = retrievedJSON.getString("account");
                 retrievedItem.amount = retrievedJSON.getDouble("amount");

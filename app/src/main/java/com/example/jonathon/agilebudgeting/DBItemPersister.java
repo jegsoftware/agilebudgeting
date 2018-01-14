@@ -74,11 +74,13 @@ public class DBItemPersister implements IPersistItem, Serializable {
         String acct = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_ACCOUNT));
         int perNum = cursor.getInt(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_PERIODNUM));
         int perYear = cursor.getInt(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_PERIODYEAR));
+        String type = cursor.getString(cursor.getColumnIndex(AgileBudgetingContract.Items.COLUMN_NAME_TYPE));
 
         cursor.close();
         db.close();
 
         Item newItem = new Item();
+        newItem.type = type;
         newItem.date = date;
         newItem.setDescription(desc);
         newItem.setAmount(amt);
