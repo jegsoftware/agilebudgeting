@@ -17,7 +17,7 @@ public class Plan implements Serializable {
     private PlanStatus actualsStatus;
     private PlanningPeriod period;
     private ArrayList<Item> plannedItems;
-    private ArrayList<Deposit> deposits;
+    private ArrayList<Item> deposits;
     private PlanningPeriod planId;
     private ArrayList<ActualItem> actualItems;
     private IPersistPlan persister;
@@ -30,7 +30,7 @@ public class Plan implements Serializable {
         planningStatus = PlanStatus.OPEN;
         actualsStatus = PlanStatus.OPEN;
         plannedItems = new ArrayList<Item>();
-        deposits = new ArrayList<Deposit>();
+        deposits = new ArrayList<Item>();
         actualItems = new ArrayList<ActualItem>();
         initializing = true;
     }
@@ -99,7 +99,7 @@ public class Plan implements Serializable {
         persist();
     }
 
-    public void addDeposit(Deposit dep) {
+    public void addDeposit(Item dep) {
         deposits.add(dep);
         persist();
     }
@@ -119,7 +119,7 @@ public class Plan implements Serializable {
 
     public double getTotalDeposits() {
         double totalDeposits = 0.00;
-        for (Deposit dep: deposits) {
+        for (Item dep: deposits) {
             totalDeposits += dep.getAmount();
         }
         return totalDeposits;
@@ -147,7 +147,7 @@ public class Plan implements Serializable {
         return;
     }
 
-    public ArrayList<Deposit> getDeposits() {
+    public ArrayList<Item> getDeposits() {
         return deposits;
     }
 

@@ -142,7 +142,7 @@ public class DBPlanPersister implements IPersistPlan,Serializable {
             UUID itemId = UUID.fromString(itemIdStr);
 
             if ("Deposit".equals(type)) {
-                Deposit deposit = Deposit.createDeposit(itemId, new DBItemPersister());
+                Item deposit = Item.createDeposit(itemId, new DBItemPersister());
                 newPlan.addDeposit(deposit);
             }
             else if ("PlannedItem".equals(type)) {

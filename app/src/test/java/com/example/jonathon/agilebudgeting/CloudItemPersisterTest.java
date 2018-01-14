@@ -31,7 +31,7 @@ public class CloudItemPersisterTest {
 
     @Test
     public void persistRelationship() throws Exception {
-        Item testPlanned = Item.createItem(
+        Item testPlanned = Item.createPlannedItem(
                                     new PlanningPeriod(20, 2017),
                                     "Test planned item for two actuals",
                                     100.00,

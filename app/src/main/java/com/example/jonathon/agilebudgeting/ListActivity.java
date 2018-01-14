@@ -69,7 +69,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
             TextView item = new TextView(itemView.getContext());
             String itemText = curItem.getDescription() + " $" + curItem.getAmountString() + " " + curItem.getAccount();
             if ("Deposit".equals(listType)) {
-                Deposit deposit = (Deposit) curItem;
+                Item deposit = (Item) curItem;
                 itemText = deposit.getDate() + " " + itemText;
             }
             else if ("ActualItem".equals(listType)) {

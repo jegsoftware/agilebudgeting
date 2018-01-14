@@ -24,19 +24,28 @@ public class Item implements Serializable {
         actualItems = new ArrayList<ActualItem>();
     }
 
-    public static Item createItem(PlanningPeriod planId, String desc, double amt, String acct, IPersistItem persister) {
+    public static Item createPlannedItem(PlanningPeriod planId, String desc, double amt, String acct, IPersistItem persister) {
+        return createItem("PlannedItem", planId, desc, amt, acct, "", persister);
+    }
+
+    public static Item createItem(String type, PlanningPeriod planId, String desc, double amt, String acct, String date, IPersistItem persister) {
         Item newItem = new Item();
 
+        newItem.setPlanPeriod(planId);
         newItem.setDescription(desc);
         newItem.setAmount(amt);
         newItem.setAccount(acct);
-        newItem.setPlanPeriod(planId);
+        newItem.setDate(date);
         newItem.persister = persister;
-        newItem.type = "PlannedItem";
+        newItem.type = type;
         newItem.itemId = UUID.randomUUID();
         persister.persist(newItem);
 
         return newItem;
+    }
+
+    public static Item createDeposit(PlanningPeriod planId, String date, String desc, double amt, String acct, IPersistItem persister) {
+        return createItem("Deposit", planId, desc, amt, acct, date, persister);
     }
 
     public static Item createItem(UUID itemID, IPersistItem persister) {
@@ -44,6 +53,20 @@ public class Item implements Serializable {
 
         retrievedItem.persister = persister;
         return retrievedItem;
+    }
+
+    public static Item createDeposit(UUID itemID, IPersistItem persister) {
+        Item retrievedItem = persister.retrieve(itemID);
+        Item deposit = new Item();
+        deposit.type = "Deposit";
+        deposit.setDate(retrievedItem.getDate());
+        deposit.setDescription(retrievedItem.getDescription());
+        deposit.setAmount(retrievedItem.getAmount());
+        deposit.setAccount(retrievedItem.getAccount());
+        deposit.setPlanPeriod(retrievedItem.getPlanPeriod());
+        deposit.itemId = retrievedItem.getItemId();
+        deposit.persister = persister;
+        return deposit;
     }
 
 

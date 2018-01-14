@@ -115,7 +115,7 @@ public class PlanActivity extends AppCompatActivity {
         }
         else if (requestCode == CREATE_DEPOSIT) {
             if (resultCode == RESULT_OK) {
-                Deposit deposit = (Deposit) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
+                Item deposit = (Item) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
                 plan.addDeposit(deposit);
                 updateTotals();
             }

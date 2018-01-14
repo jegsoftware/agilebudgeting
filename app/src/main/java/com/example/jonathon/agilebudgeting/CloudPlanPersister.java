@@ -4,14 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.Serializable;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.UUID;
 
 
@@ -80,7 +73,7 @@ public class CloudPlanPersister implements IPersistPlan, Serializable {
             UUID itemId = UUID.fromString(itemIdStr);
 
             if ("Deposit".equals(type)) {
-                Deposit deposit = Deposit.createDeposit(itemId, new CloudItemPersister());
+                Item deposit = Item.createDeposit(itemId, new CloudItemPersister());
                 newPlan.addDeposit(deposit);
             } else if ("PlannedItem".equals(type)) {
                 Item plannedItem = Item.createItem(itemId, new CloudItemPersister());

@@ -7,15 +7,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.GregorianCalendar;
-
 import static android.content.Intent.ACTION_EDIT;
 import static android.content.Intent.ACTION_MAIN;
 
 public class EditDepositActivity extends AppCompatActivity{
 
     private Plan plan;
-    private Deposit deposit;
+    private Item deposit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +30,7 @@ public class EditDepositActivity extends AppCompatActivity{
             deposit = null;
         }
         else if (action.equals(ACTION_EDIT)) {
-            deposit = (Deposit) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
+            deposit = (Item) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
             populateFields();
         }
 
@@ -89,7 +87,7 @@ public class EditDepositActivity extends AppCompatActivity{
         String acct = acctField.getText().toString();
 
         if (null == deposit) {
-            deposit = Deposit.createDeposit(plan.getPeriod(), depositDate, desc, amount, acct, new DBItemPersister());
+            deposit = Item.createDeposit(plan.getPeriod(), depositDate, desc, amount, acct, new DBItemPersister());
         }
         else {
             deposit.setDate(depositDate);

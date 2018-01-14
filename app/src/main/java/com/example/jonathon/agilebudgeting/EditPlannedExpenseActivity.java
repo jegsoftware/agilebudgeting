@@ -83,7 +83,7 @@ public class EditPlannedExpenseActivity extends AppCompatActivity {
         String acct = acctField.getText().toString();
 
         if (null == expense) {
-            expense = Item.createItem(plan.getPeriod(), desc, amount, acct, new DBItemPersister());
+            expense = Item.createPlannedItem(plan.getPeriod(), desc, amount, acct, new DBItemPersister());
         }
         else {
             expense.setDescription(desc);
