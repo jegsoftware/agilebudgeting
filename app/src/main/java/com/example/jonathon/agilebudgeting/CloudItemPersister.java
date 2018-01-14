@@ -12,11 +12,18 @@ import java.util.UUID;
  */
 
 public class CloudItemPersister implements IPersistItem, Serializable {
+
+    private JSONObject itemJSON;
+
+    CloudItemPersister() {
+        itemJSON = null;
+    }
+
     @Override
     public void persist(Item item) {
-        JSONObject saveItemObject = new JSONObject();
+        itemJSON = new JSONObject();
         try {
-            saveItemObject.put("persistenceType", "saveItem");
+            itemJSON.put("persistenceType", "saveItem");
             JSONObject dataObject = new JSONObject();
 
 
@@ -29,8 +36,8 @@ public class CloudItemPersister implements IPersistItem, Serializable {
             dataObject.put("account", item.getAccount());
             dataObject.put("type", item.getType());
 
-            saveItemObject.put("data", dataObject);
-            CloudCaller.sendJSON(saveItemObject);
+            itemJSON.put("data", dataObject);
+            CloudCaller.sendJSON(itemJSON);
         } catch (JSONException e) {
 
         }
@@ -39,6 +46,7 @@ public class CloudItemPersister implements IPersistItem, Serializable {
 
     @Override
     public void persistRelationship(Item item1, Item item2) {
+        itemJSON = new JSONObject();
         JSONObject saveItemObject = new JSONObject();
         try {
             saveItemObject.put("persistenceType", "saveItemRelationship");
@@ -73,6 +81,7 @@ public class CloudItemPersister implements IPersistItem, Serializable {
                 retrievedItem.amount = retrievedJSON.getDouble("amount");
                 retrievedItem.date = retrievedJSON.getString("date");
                 retrievedItem.itemId = itemId;
+
                 retrievedItem.persister = this;
             }
 
@@ -101,12 +110,17 @@ public class CloudItemPersister implements IPersistItem, Serializable {
     }
 
     private JSONObject retrieveItemJSON(UUID itemId) throws JSONException {
+        if ((itemJSON != null) && itemJSON.getString("uuid").equals(itemId.toString())) {
+            return itemJSON;
+        }
+
         JSONObject retrieveItemObject = new JSONObject();
         retrieveItemObject.put("persistenceType", "loadItem");
         JSONObject dataObject = new JSONObject();
         dataObject.put("uuid", itemId.toString());
         retrieveItemObject.put("data", dataObject);
-        return CloudCaller.sendJSON(retrieveItemObject);
+        itemJSON = CloudCaller.sendJSON(retrieveItemObject);
+        return itemJSON;
     }
 
 }
