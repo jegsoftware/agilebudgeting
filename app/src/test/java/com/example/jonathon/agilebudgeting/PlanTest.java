@@ -1,27 +1,18 @@
 package com.example.jonathon.agilebudgeting;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by Jonathon on 2/25/2017.
@@ -148,11 +139,11 @@ public class PlanTest {
     @Test
     public void addAndTotalActualItems() throws Exception {
         Plan testPlan = Plan.createPlan(new GregorianCalendar(2017,1,7), planPersister);
-        ActualItem item1 = ActualItem.createActualItem(testPlan.getPeriod(), "02/08/2017", "test Actual Item 1", 42.00, "Checking", new TestItemPersister());
+        Item item1 = Item.createActualItem(testPlan.getPeriod(), "02/08/2017", "test Actual Item 1", 42.00, "Checking", new TestItemPersister());
         testPlan.addActualItem(item1);
-        ActualItem item2 = ActualItem.createActualItem(testPlan.getPeriod(), "02/09/2017", "test Actual Item 2", 28.00, "Checking", new TestItemPersister());
+        Item item2 = Item.createActualItem(testPlan.getPeriod(), "02/09/2017", "test Actual Item 2", 28.00, "Checking", new TestItemPersister());
         testPlan.addActualItem(item2);
-        ActualItem item3 = ActualItem.createActualItem(testPlan.getPeriod(), "02/10/2017", "test Actual Item 3", 30.00, "Checking", new TestItemPersister());
+        Item item3 = Item.createActualItem(testPlan.getPeriod(), "02/10/2017", "test Actual Item 3", 30.00, "Checking", new TestItemPersister());
         testPlan.addActualItem(item3);
         assertEquals(100.00, testPlan.getTotalActualExpenses(), 0.00);
     }
@@ -182,11 +173,11 @@ public class PlanTest {
         testPlan.addPlannedItem(item2);
         Item item3 = Item.createPlannedItem(testPlan.getPeriod(), "test planned item 3", 30.00, "Checking", new TestItemPersister());
         testPlan.addPlannedItem(item3);
-        ActualItem actualItem1 = ActualItem.createActualItem(testPlan.getPeriod(), "02/08/2017", "test Actual Item 1", 42.00, "Checking", new TestItemPersister());
+        Item actualItem1 = Item.createActualItem(testPlan.getPeriod(), "02/08/2017", "test Actual Item 1", 42.00, "Checking", new TestItemPersister());
         testPlan.addActualItem(actualItem1);
-        ActualItem actualItem2 = ActualItem.createActualItem(testPlan.getPeriod(), "02/09/2017", "test Actual Item 2", 25.00, "Checking", new TestItemPersister());
+        Item actualItem2 = Item.createActualItem(testPlan.getPeriod(), "02/09/2017", "test Actual Item 2", 25.00, "Checking", new TestItemPersister());
         testPlan.addActualItem(actualItem2);
-        ActualItem actualItem3 = ActualItem.createActualItem(testPlan.getPeriod(), "02/10/2017", "test Actual Item 3", 32.00, "Checking", new TestItemPersister());
+        Item actualItem3 = Item.createActualItem(testPlan.getPeriod(), "02/10/2017", "test Actual Item 3", 32.00, "Checking", new TestItemPersister());
         testPlan.addActualItem(actualItem3);
         assertEquals(1.00,testPlan.getNetActualAmount(),0.00);
     }

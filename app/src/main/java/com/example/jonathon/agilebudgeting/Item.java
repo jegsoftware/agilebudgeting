@@ -2,6 +2,7 @@ package com.example.jonathon.agilebudgeting;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.UUID;
 
 /**
@@ -17,11 +18,11 @@ public class Item implements Serializable {
     protected String date;
     protected IPersistItem persister;
     protected String type;
-    protected ArrayList<ActualItem> actualItems;
+    protected ArrayList<Item> relatedItems;
 
     protected Item() {
         date = "";
-        actualItems = new ArrayList<ActualItem>();
+        relatedItems = new ArrayList<Item>();
     }
 
     public static Item createPlannedItem(PlanningPeriod planId, String desc, double amt, String acct, IPersistItem persister) {
@@ -44,10 +45,6 @@ public class Item implements Serializable {
         return newItem;
     }
 
-    public static Item createDeposit(PlanningPeriod planId, String date, String desc, double amt, String acct, IPersistItem persister) {
-        return createItem("Deposit", planId, desc, amt, acct, date, persister);
-    }
-
     public static Item createItem(UUID itemID, IPersistItem persister) {
         Item retrievedItem = persister.retrieve(itemID);
 
@@ -55,18 +52,30 @@ public class Item implements Serializable {
         return retrievedItem;
     }
 
+    public static Item createDeposit(PlanningPeriod planId, String date, String desc, double amt, String acct, IPersistItem persister) {
+        return createItem("Deposit", planId, desc, amt, acct, date, persister);
+    }
+
     public static Item createDeposit(UUID itemID, IPersistItem persister) {
+        return createItem(itemID, persister);
+    }
+
+    public static Item createActualItem(PlanningPeriod planId, String date, String desc, double amt, String acct, IPersistItem persister) {
+        return createItem("ActualItem", planId, desc, amt, acct, date, persister);
+    }
+
+    public static Item createActualItem(UUID itemID, IPersistItem persister) {
         Item retrievedItem = persister.retrieve(itemID);
-        Item deposit = new Item();
-        deposit.type = "Deposit";
-        deposit.setDate(retrievedItem.getDate());
-        deposit.setDescription(retrievedItem.getDescription());
-        deposit.setAmount(retrievedItem.getAmount());
-        deposit.setAccount(retrievedItem.getAccount());
-        deposit.setPlanPeriod(retrievedItem.getPlanPeriod());
-        deposit.itemId = retrievedItem.getItemId();
-        deposit.persister = persister;
-        return deposit;
+        populateRelatedItems(retrievedItem);
+
+        return retrievedItem;
+    }
+
+    private static void populateRelatedItems(Item item) {
+        UUID[] itemIds = item.persister.retrieveRelatedItems(item);
+        for (int i = 0; i < itemIds.length; i++) {
+            item.relatedItems.add(Item.createItem(itemIds[i],item.persister));
+        }
     }
 
 
@@ -126,10 +135,32 @@ public class Item implements Serializable {
         persister.persist(this);
     }
 
-    public void addActualItem(ActualItem actualItem) {
-        if ((null != actualItem) && !actualItems.contains(actualItem)) {
-            actualItems.add(actualItem);
-            actualItem.addPlannedItem(this);
+    public void addRelatedItem(Item plannedItem) {
+        if ((null != plannedItem) && !isMatchedTo(plannedItem)) {
+            relatedItems.add(plannedItem);
+            plannedItem.addRelatedItem(this);
+            saveRelationship(plannedItem);
         }
+    }
+
+    private boolean isMatchedTo(Item plannedItem) {
+        if (relatedItems.contains(plannedItem)) return true;
+        return hasMatch(plannedItem);
+    }
+
+    private void saveRelationship(Item plannedItem) {
+        persister.persistRelationship(this, plannedItem);
+    }
+
+    public boolean hasMatch(Item item) {
+        Iterator<Item> iter = relatedItems.iterator();
+        while (iter.hasNext()) {
+            Item curItem = iter.next();
+            if (item.getItemId().equals(curItem.getItemId())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

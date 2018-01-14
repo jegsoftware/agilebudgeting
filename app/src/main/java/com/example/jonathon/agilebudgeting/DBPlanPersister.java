@@ -150,7 +150,7 @@ public class DBPlanPersister implements IPersistPlan,Serializable {
                 newPlan.addPlannedItem(plannedItem);
             }
             else if ("ActualItem".equals(type)) {
-                ActualItem actualItem = ActualItem.createActualItem(itemId, new DBItemPersister());
+                Item actualItem = Item.createActualItem(itemId, new DBItemPersister());
                 newPlan.addActualItem(actualItem);
             }
 

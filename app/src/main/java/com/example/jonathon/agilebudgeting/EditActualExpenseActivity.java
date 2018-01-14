@@ -14,7 +14,7 @@ public class EditActualExpenseActivity extends AppCompatActivity {
 
     private static final int MATCH_ACTUAL_PLANNED = 0;
     private Plan plan;
-    private ActualItem item;
+    private Item item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class EditActualExpenseActivity extends AppCompatActivity {
             actualExpensePeriod.setText(plan.getPeriod().getPeriodStartDate());
             item = null;
         } else if (action.equals(ACTION_EDIT)) {
-            item = (ActualItem) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
+            item = (Item) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
             populateFields();
         }
 
@@ -116,7 +116,7 @@ public class EditActualExpenseActivity extends AppCompatActivity {
         String acct = acctField.getText().toString();
 
         if (null == item) {
-            item = ActualItem.createActualItem(plan.getPeriod(), actualExpenseDate, desc, amount, acct, new DBItemPersister());
+            item = Item.createActualItem(plan.getPeriod(), actualExpenseDate, desc, amount, acct, new DBItemPersister());
         } else {
             item.setDate(actualExpenseDate);
             item.setDescription(desc);

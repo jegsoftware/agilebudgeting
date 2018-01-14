@@ -122,7 +122,7 @@ public class PlanActivity extends AppCompatActivity {
         }
         else if (requestCode == CREATE_ACTUAL_EXPENSE) {
             if (resultCode == RESULT_OK) {
-                ActualItem item = (ActualItem) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
+                Item item = (Item) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
                 plan.addActualItem(item);
                 updateTotals();
             }

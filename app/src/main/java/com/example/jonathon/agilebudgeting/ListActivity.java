@@ -73,7 +73,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
                 itemText = deposit.getDate() + " " + itemText;
             }
             else if ("ActualItem".equals(listType)) {
-                ActualItem actualItem = (ActualItem) curItem;
+                Item actualItem = (Item) curItem;
                 itemText = actualItem.getDate() + " " + itemText;
             }
             Button editButton = new Button(itemView.getContext());

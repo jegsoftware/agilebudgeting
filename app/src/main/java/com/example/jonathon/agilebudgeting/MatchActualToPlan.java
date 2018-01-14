@@ -1,6 +1,5 @@
 package com.example.jonathon.agilebudgeting;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +15,7 @@ import java.util.UUID;
 public class MatchActualToPlan extends AppCompatActivity {
 
     private Plan plan;
-    private ActualItem actualItem;
+    private Item actualItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +24,7 @@ public class MatchActualToPlan extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        actualItem = (ActualItem) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ACTUAL_ITEM");
+        actualItem = (Item) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ACTUAL_ITEM");
         plan = (Plan) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN");
 
         populateList();
@@ -73,7 +72,7 @@ public class MatchActualToPlan extends AppCompatActivity {
                 UUID plannedItemId = UUID.fromString(itemIdText.getText().toString());
                 Item plannedItem = Item.createItem(plannedItemId, new DBItemPersister());
 
-                actualItem.addPlannedItem(plannedItem);
+                actualItem.addRelatedItem(plannedItem);
             }
         }
 

@@ -19,7 +19,7 @@ public class Plan implements Serializable {
     private ArrayList<Item> plannedItems;
     private ArrayList<Item> deposits;
     private PlanningPeriod planId;
-    private ArrayList<ActualItem> actualItems;
+    private ArrayList<Item> actualItems;
     private IPersistPlan persister;
     private boolean initializing;
 
@@ -31,7 +31,7 @@ public class Plan implements Serializable {
         actualsStatus = PlanStatus.OPEN;
         plannedItems = new ArrayList<Item>();
         deposits = new ArrayList<Item>();
-        actualItems = new ArrayList<ActualItem>();
+        actualItems = new ArrayList<Item>();
         initializing = true;
     }
 
@@ -104,7 +104,7 @@ public class Plan implements Serializable {
         persist();
     }
 
-    public void addActualItem(ActualItem actualItem) {
+    public void addActualItem(Item actualItem) {
         actualItems.add(actualItem);
         persist();
     }
@@ -127,7 +127,7 @@ public class Plan implements Serializable {
 
     public double getTotalActualExpenses() {
         double totalExpenses = 0.00;
-        for (ActualItem item: actualItems) {
+        for (Item item: actualItems) {
             totalExpenses += item.getAmount();
         }
         return totalExpenses;
@@ -171,7 +171,7 @@ public class Plan implements Serializable {
         return actualsStatus == PlanStatus.OPEN;
     }
 
-    public ArrayList<ActualItem> getActualItems() { return actualItems; }
+    public ArrayList<Item> getActualItems() { return actualItems; }
 
     public ArrayList<Item> getPlannedItemsForAccount(final String account) {
         ArrayList<Item> accountItems = new ArrayList<Item>();

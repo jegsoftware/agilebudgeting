@@ -60,8 +60,8 @@ public class ItemTest {
 
     @Test
     public void addActualItem() throws Exception {
-        ActualItem relatedItem = ActualItem.createActualItem(period,"02/07/2017", "Test description", 22.00, "Checking", itemPersister);
-        testPlannedItem.addActualItem(relatedItem);
+        Item relatedItem = Item.createActualItem(period,"02/07/2017", "Test description", 22.00, "Checking", itemPersister);
+        relatedItem.addRelatedItem(testPlannedItem);
     }
 
 }

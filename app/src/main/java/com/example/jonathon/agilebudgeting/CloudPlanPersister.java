@@ -79,7 +79,7 @@ public class CloudPlanPersister implements IPersistPlan, Serializable {
                 Item plannedItem = Item.createItem(itemId, new CloudItemPersister());
                 newPlan.addPlannedItem(plannedItem);
             } else if ("ActualItem".equals(type)) {
-                ActualItem actualItem = ActualItem.createActualItem(itemId, new CloudItemPersister());
+                Item actualItem = Item.createActualItem(itemId, new CloudItemPersister());
                 newPlan.addActualItem(actualItem);
             }
         }
