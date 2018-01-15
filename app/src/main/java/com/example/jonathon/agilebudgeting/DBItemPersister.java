@@ -137,6 +137,7 @@ public class DBItemPersister implements IPersistItem, Serializable {
                 AgileBudgetingContract.Items.COLUMN_NAME_PERIODNUM,
                 AgileBudgetingContract.Items.COLUMN_NAME_PERIODYEAR,
                 AgileBudgetingContract.Items.COLUMN_NAME_ITEMUUID,
+                AgileBudgetingContract.Items.COLUMN_NAME_TYPE,
         };
 
         Cursor cursor = db.query(
