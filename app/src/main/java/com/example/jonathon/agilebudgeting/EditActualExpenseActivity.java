@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -12,9 +13,16 @@ import static android.content.Intent.ACTION_MAIN;
 
 public class EditActualExpenseActivity extends AppCompatActivity {
 
+    private static final int CREATE_PLANNED_EXPENSE = 0;
+    private static final int CREATE_DEPOSIT = 1;
+    private static final int CREATE_ACTUAL_EXPENSE = 2;
+    private static final int EDIT_PLANNED_ITEM = 0;
+    private static final int EDIT_DEPOSIT = 1;
+    private static final int EDIT_ACTUAL_ITEM = 2;
     private static final int MATCH_ACTUAL_PLANNED = 0;
     private Plan plan;
     private Item item;
+    private int requestCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +31,33 @@ public class EditActualExpenseActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String action = intent.getAction();
+        requestCode = intent.getIntExtra("requestCode", -1);
+        if (EDIT_PLANNED_ITEM == requestCode) {
+            requestCode = CREATE_PLANNED_EXPENSE;
+        } else if (EDIT_ACTUAL_ITEM == requestCode) {
+            requestCode = CREATE_ACTUAL_EXPENSE;
+        } else if (EDIT_DEPOSIT == requestCode) {
+            requestCode = CREATE_DEPOSIT;
+        }
 
         plan = (Plan) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN");
+
+        TextView itemPeriod = (TextView) findViewById(R.id.actualExpensePeriodDisplay);
+        itemPeriod.setText(plan.getPeriod().getPeriodStartDate());
+
+        if (CREATE_PLANNED_EXPENSE == requestCode) {
+            TextView dateLabel = (TextView) findViewById(R.id.actualExpenseDateLabel);
+            EditText dateField = (EditText) findViewById(R.id.actualExpenseDateField);
+            dateLabel.setVisibility(View.GONE);
+            dateField.setVisibility(View.GONE);
+        }
+
+        if (requestCode != CREATE_ACTUAL_EXPENSE) {
+            Button matchButton = (Button) findViewById(R.id.actualExpenseMatchButton);
+            matchButton.setVisibility(View.GONE);
+        }
+
         if (action.equals(ACTION_MAIN)) {
-            TextView actualExpensePeriod = (TextView) findViewById(R.id.actualExpensePeriodDisplay);
-            actualExpensePeriod.setText(plan.getPeriod().getPeriodStartDate());
             item = null;
         } else if (action.equals(ACTION_EDIT)) {
             item = (Item) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
@@ -38,8 +68,8 @@ public class EditActualExpenseActivity extends AppCompatActivity {
 
     private void populateFields() {
         if (item != null) {
-            EditText actualExpenseDateField = (EditText) findViewById(R.id.actualExpenseDateField);
-            actualExpenseDateField.setText(item.getDate());
+            EditText dateField = (EditText) findViewById(R.id.actualExpenseDateField);
+            dateField.setText(item.getDate());
 
             EditText descField = (EditText) findViewById(R.id.actualExpenseDescriptionField);
             descField.setText(item.getDescription());
@@ -59,8 +89,8 @@ public class EditActualExpenseActivity extends AppCompatActivity {
     }
 
     public void clearFields(View view) {
-        EditText actualExpenseDateField = (EditText) findViewById(R.id.actualExpenseDateField);
-        actualExpenseDateField.setText("");
+        EditText dateField = (EditText) findViewById(R.id.actualExpenseDateField);
+        dateField.setText("");
 
         EditText descField = (EditText) findViewById(R.id.actualExpenseDescriptionField);
         descField.setText("");
@@ -103,8 +133,8 @@ public class EditActualExpenseActivity extends AppCompatActivity {
     }
 
     private void saveExpense() {
-        EditText actualExpenseDateField = (EditText) findViewById(R.id.actualExpenseDateField);
-        String actualExpenseDate = actualExpenseDateField.getText().toString();
+        EditText dateField = (EditText) findViewById(R.id.actualExpenseDateField);
+        String date = dateField.getText().toString();
 
         EditText descField = (EditText) findViewById(R.id.actualExpenseDescriptionField);
         String desc = descField.getText().toString();
@@ -116,14 +146,20 @@ public class EditActualExpenseActivity extends AppCompatActivity {
         String acct = acctField.getText().toString();
 
         if (null == item) {
-            item = Item.createActualItem(plan.getPeriod(), actualExpenseDate, desc, amount, acct, new DBItemPersister());
-        } else {
-            item.setDate(actualExpenseDate);
+            if (CREATE_PLANNED_EXPENSE == requestCode) {
+                item = Item.createPlannedItem(plan.getPeriod(), desc, amount, acct, new DBItemPersister());
+            } else if (CREATE_DEPOSIT == requestCode) {
+                item = Item.createDeposit(plan.getPeriod(), date, desc, amount, acct, new DBItemPersister());
+            } else if (CREATE_ACTUAL_EXPENSE == requestCode) {
+                item = Item.createActualItem(plan.getPeriod(), date, desc, amount, acct, new DBItemPersister());
+            }
+        }
+        else {
+            item.setDate(date);
             item.setDescription(desc);
             item.setAmount(amount);
             item.setAccount(acct);
         }
-
         item.persist();
     }
 

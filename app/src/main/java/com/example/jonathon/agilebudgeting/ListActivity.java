@@ -107,11 +107,11 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         int requestCode;
 
         if ("PlannedItem".equals(listType)) {
-            intent = new Intent(this, EditDepositActivity.class);
+            intent = new Intent(this, EditActualExpenseActivity.class);
             requestCode = EDIT_PLANNED_ITEM;
         }
         else if ("Deposit".equals(listType)) {
-            intent = new Intent(this, EditDepositActivity.class);
+            intent = new Intent(this, EditActualExpenseActivity.class);
             requestCode = EDIT_DEPOSIT;
         }
         else if ("ActualItem".equals(listType)) {
