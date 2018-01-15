@@ -16,8 +16,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".PlanActivity" />
-        <activity android:name=".EditPlannedExpenseActivity" />
-        <activity android:name=".EditDepositActivity" />
         <activity android:name=".ListActivity" />
         <activity android:name=".EditActualExpenseActivity" />
         <activity android:name=".MatchActualToPlan"></activity>
