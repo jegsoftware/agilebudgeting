@@ -106,23 +106,17 @@ public class PlanActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
 
-        if (requestCode == CREATE_PLANNED_EXPENSE) {
-            if (resultCode == RESULT_OK) {
-                Item item = (Item) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
+        if (resultCode == RESULT_OK) {
+            Item item = (Item) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
+            if (requestCode == CREATE_PLANNED_EXPENSE) {
                 plan.addPlannedItem(item);
                 updateTotals();
             }
-        }
-        else if (requestCode == CREATE_DEPOSIT) {
-            if (resultCode == RESULT_OK) {
-                Item deposit = (Item) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
-                plan.addDeposit(deposit);
+            else if (requestCode == CREATE_DEPOSIT) {
+                plan.addDeposit(item);
                 updateTotals();
             }
-        }
-        else if (requestCode == CREATE_ACTUAL_EXPENSE) {
-            if (resultCode == RESULT_OK) {
-                Item item = (Item) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
+            else if (requestCode == CREATE_ACTUAL_EXPENSE) {
                 plan.addActualItem(item);
                 updateTotals();
             }

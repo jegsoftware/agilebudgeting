@@ -68,13 +68,8 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
             Item curItem = iter.next();
             TextView item = new TextView(itemView.getContext());
             String itemText = curItem.getDescription() + " $" + curItem.getAmountString() + " " + curItem.getAccount();
-            if ("Deposit".equals(listType)) {
-                Item deposit = (Item) curItem;
-                itemText = deposit.getDate() + " " + itemText;
-            }
-            else if ("ActualItem".equals(listType)) {
-                Item actualItem = (Item) curItem;
-                itemText = actualItem.getDate() + " " + itemText;
+            if ("Deposit".equals(listType) || "ActualItem".equals(listType)) {
+                itemText = curItem.getDate() + " " + itemText;
             }
             Button editButton = new Button(itemView.getContext());
             editButton.setTag(curItem);
