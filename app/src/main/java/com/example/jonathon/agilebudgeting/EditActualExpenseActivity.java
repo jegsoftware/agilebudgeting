@@ -45,16 +45,24 @@ public class EditActualExpenseActivity extends AppCompatActivity {
         TextView itemPeriod = (TextView) findViewById(R.id.actualExpensePeriodDisplay);
         itemPeriod.setText(plan.getPeriod().getPeriodStartDate());
 
-        if (CREATE_PLANNED_EXPENSE == requestCode) {
-            TextView dateLabel = (TextView) findViewById(R.id.actualExpenseDateLabel);
-            EditText dateField = (EditText) findViewById(R.id.actualExpenseDateField);
-            dateLabel.setVisibility(View.GONE);
-            dateField.setVisibility(View.GONE);
-        }
-
-        if (requestCode != CREATE_ACTUAL_EXPENSE) {
-            Button matchButton = (Button) findViewById(R.id.actualExpenseMatchButton);
-            matchButton.setVisibility(View.GONE);
+        TextView itemPeriodLabel = (TextView) findViewById(R.id.actualExpensePeriodLabel);
+        Button matchButton = (Button) findViewById(R.id.actualExpenseMatchButton);
+        Button saveButton = (Button) findViewById(R.id.actualExpenseUnplannedButton);
+        switch (requestCode) {
+            case CREATE_PLANNED_EXPENSE:
+                TextView dateLabel = (TextView) findViewById(R.id.actualExpenseDateLabel);
+                EditText dateField = (EditText) findViewById(R.id.actualExpenseDateField);
+                dateLabel.setVisibility(View.GONE);
+                dateField.setVisibility(View.GONE);
+                matchButton.setVisibility(View.GONE);
+                saveButton.setText(R.string.plannedExpenseSaveButton);
+                itemPeriodLabel.setText(R.string.plannedExpensePeriodLabel);
+                break;
+            case CREATE_DEPOSIT:
+                matchButton.setVisibility(View.GONE);
+                saveButton.setText(R.string.depositSaveButton);
+                itemPeriodLabel.setText(R.string.depositPeriodLabel);
+                break;
         }
 
         if (action.equals(ACTION_MAIN)) {
