@@ -107,7 +107,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         int requestCode;
 
         if ("PlannedItem".equals(listType)) {
-            intent = new Intent(this, EditPlannedExpenseActivity.class);
+            intent = new Intent(this, EditDepositActivity.class);
             requestCode = EDIT_PLANNED_ITEM;
         }
         else if ("Deposit".equals(listType)) {
@@ -125,6 +125,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         intent.setAction(ACTION_EDIT);
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("com.example.jonathon.agilebudgeting.ITEM", clickedItem);
+        intent.putExtra("requestCode", requestCode);
         startActivityForResult(intent, requestCode);
     }
 

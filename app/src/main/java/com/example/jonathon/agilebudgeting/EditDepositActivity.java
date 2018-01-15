@@ -12,8 +12,10 @@ import static android.content.Intent.ACTION_MAIN;
 
 public class EditDepositActivity extends AppCompatActivity{
 
+    private static final int CREATE_PLANNED_EXPENSE = 0;
     private Plan plan;
-    private Item deposit;
+    private Item item;
+    private int requestCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,33 +24,42 @@ public class EditDepositActivity extends AppCompatActivity{
 
         Intent intent = getIntent();
         String action = intent.getAction();
-
+        requestCode = intent.getIntExtra("requestCode", -1);
         plan = (Plan) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN");
+
+        TextView itemPeriod = (TextView) findViewById(R.id.depositPeriodDisplay);
+        itemPeriod.setText(plan.getPeriod().getPeriodStartDate());
+
+        if (requestCode == CREATE_PLANNED_EXPENSE) {
+            TextView depositDateLabel = (TextView) findViewById(R.id.depositDateLabel);
+            EditText depositDateField = (EditText) findViewById(R.id.depositDateField);
+            depositDateLabel.setVisibility(View.GONE);
+            depositDateField.setVisibility(View.GONE);
+        }
+
         if (action.equals(ACTION_MAIN)) {
-            TextView depositPeriod = (TextView) findViewById(R.id.depositPeriodDisplay);
-            depositPeriod.setText(plan.getPeriod().getPeriodStartDate());
-            deposit = null;
+            item = null;
         }
         else if (action.equals(ACTION_EDIT)) {
-            deposit = (Item) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
+            item = (Item) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
             populateFields();
         }
 
     }
 
     private void populateFields() {
-        if (deposit != null) {
+        if (item != null) {
             EditText depositDateField = (EditText) findViewById(R.id.depositDateField);
-            depositDateField.setText(deposit.getDate());
+            depositDateField.setText(item.getDate());
 
             EditText descField = (EditText) findViewById(R.id.depositDescriptionField);
-            descField.setText(deposit.getDescription());
+            descField.setText(item.getDescription());
 
             EditText amountField = (EditText) findViewById(R.id.depositAmountField);
-            amountField.setText(deposit.getAmountString());
+            amountField.setText(item.getAmountString());
 
             EditText acctField = (EditText) findViewById(R.id.depositAccountField);
-            acctField.setText(deposit.getAccount());
+            acctField.setText(item.getAccount());
         }
     }
 
@@ -86,20 +97,24 @@ public class EditDepositActivity extends AppCompatActivity{
         EditText acctField = (EditText) findViewById(R.id.depositAccountField);
         String acct = acctField.getText().toString();
 
-        if (null == deposit) {
-            deposit = Item.createDeposit(plan.getPeriod(), depositDate, desc, amount, acct, new DBItemPersister());
+        if (null == item) {
+            if (CREATE_PLANNED_EXPENSE == requestCode) {
+                item = Item.createPlannedItem(plan.getPeriod(), desc, amount, acct, new DBItemPersister());
+            } else {
+                item = Item.createDeposit(plan.getPeriod(), depositDate, desc, amount, acct, new DBItemPersister());
+            }
         }
         else {
-            deposit.setDate(depositDate);
-            deposit.setDescription(desc);
-            deposit.setAmount(amount);
-            deposit.setAccount(acct);
+            item.setDate(depositDate);
+            item.setDescription(desc);
+            item.setAmount(amount);
+            item.setAccount(acct);
         }
-        deposit.persist();
+        item.persist();
 
         Intent returnIntent = new Intent();
 
-        returnIntent.putExtra("com.example.jonathon.agilebudgeting.ITEM", deposit);
+        returnIntent.putExtra("com.example.jonathon.agilebudgeting.ITEM", item);
 
         setResult(RESULT_OK, returnIntent);
         finish();

@@ -54,9 +54,10 @@ public class PlanActivity extends AppCompatActivity {
 
     public void addPlannedExpense(View view) {
         saveChanges();
-        Intent intent = new Intent(this, EditPlannedExpenseActivity.class);
+        Intent intent = new Intent(this, EditDepositActivity.class);
         intent.setAction(ACTION_MAIN);
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
+        intent.putExtra("requestCode", CREATE_PLANNED_EXPENSE);
         startActivityForResult(intent, CREATE_PLANNED_EXPENSE);
     }
 
@@ -65,6 +66,7 @@ public class PlanActivity extends AppCompatActivity {
         Intent intent = new Intent(this, EditDepositActivity.class);
         intent.setAction(ACTION_MAIN);
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
+        intent.putExtra("requestCode", CREATE_DEPOSIT);
         startActivityForResult(intent, CREATE_DEPOSIT);
     }
 
