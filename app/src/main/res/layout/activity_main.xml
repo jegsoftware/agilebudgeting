@@ -11,11 +11,28 @@
     tools:context="com.example.jonathon.agilebudgeting.MainActivity">
 
     <TextView
+        android:text="Use cloud storage: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cloudStorageLabel"
+        />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/cloudStorageLabel"
+        android:layout_toRightOf="@id/cloudStorageLabel"
+        android:layout_toEndOf="@id/cloudStorageLabel"
+        android:layout_margin="10dp"
+        android:id="@+id/cloudStorageSwitch"
+        />
+
+    <TextView
         android:text="@string/selectPlanDatePrompt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:layout_below="@+id/createPlanButton"
+        android:layout_below="@+id/cloudStorageLabel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/selectPlanDatePrompt" />

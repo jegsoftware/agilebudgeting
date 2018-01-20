@@ -3,14 +3,13 @@ package com.example.jonathon.agilebudgeting;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.DatePicker;
+import android.widget.Switch;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import static android.content.Intent.ACTION_MAIN;
-import static android.content.Intent.ACTION_VIEW;
 
 public class MainActivity extends AppCompatActivity implements DatePicker.OnDateChangedListener {
 
@@ -32,9 +31,14 @@ public class MainActivity extends AppCompatActivity implements DatePicker.OnDate
         planDate.set(year, monthOfYear, dayOfMonth);
         PlanningPeriod period = new PlanningPeriod(planDate);
 
+        Boolean useCloudData = false;
+        Switch cloudDataSwitch = (Switch) findViewById(R.id.cloudStorageSwitch);
+        useCloudData = cloudDataSwitch.isChecked();
+
         Intent intent = new Intent(this, PlanActivity.class);
         intent.setAction(ACTION_MAIN);
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_PERIOD", period);
+        intent.putExtra("com.example.jonathon.agilebudgeting.CLOUD_DATA", useCloudData);
         startActivity(intent);
 
     }

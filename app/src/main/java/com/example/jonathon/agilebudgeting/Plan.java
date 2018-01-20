@@ -22,6 +22,7 @@ public class Plan implements Serializable {
     private ArrayList<Item> actualItems;
     private IPersistPlan persister;
     private boolean initializing;
+    private boolean isStoredInCloud;
 
     private Plan()
     {
@@ -33,6 +34,7 @@ public class Plan implements Serializable {
         deposits = new ArrayList<Item>();
         actualItems = new ArrayList<Item>();
         initializing = true;
+        isStoredInCloud = false;
     }
 
     public static Plan createPlan(PlanningPeriod planPeriod, IPersistPlan persister) {
@@ -173,6 +175,14 @@ public class Plan implements Serializable {
 
     public ArrayList<Item> getActualItems() { return actualItems; }
 
+    public void setStoredInCloud(boolean storedInCloud) {
+        isStoredInCloud = storedInCloud;
+    }
+
+    public boolean isStoredInCloud() {
+        return isStoredInCloud;
+    }
+
     public ArrayList<Item> getPlannedItemsForAccount(final String account) {
         ArrayList<Item> accountItems = new ArrayList<Item>();
         Iterator<Item> iter = plannedItems.iterator();
@@ -184,5 +194,6 @@ public class Plan implements Serializable {
         }
         return accountItems;
     }
+
 }
 

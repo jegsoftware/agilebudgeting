@@ -18,6 +18,7 @@ public class PlanActivity extends AppCompatActivity {
     private static final int CREATE_PLANNED_EXPENSE = 0;
     private static final int CREATE_DEPOSIT = 1;
     private static final int CREATE_ACTUAL_EXPENSE = 2;
+    private Boolean useCloudData;
     private Plan plan;
     private String planDate;
 
@@ -30,8 +31,12 @@ public class PlanActivity extends AppCompatActivity {
         String action = intent.getAction();
         if (action.equals(ACTION_MAIN)) {
             PlanningPeriod selectedPeriod = (PlanningPeriod) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN_PERIOD");
-
-            plan = Plan.createPlan(selectedPeriod, new DBPlanPersister());
+            useCloudData = intent.getBooleanExtra("com.example.jonathon.agilebudgeting.CLOUD_DATA", false);
+            if (useCloudData) {
+                plan = Plan.createPlan(selectedPeriod, new CloudPlanPersister());
+            } else {
+                plan = Plan.createPlan(selectedPeriod, new DBPlanPersister());
+            }
         } else {
             // we should never get here
             throw new IllegalStateException("Started plan activity with action other than ACTION_MAIN");
@@ -58,6 +63,7 @@ public class PlanActivity extends AppCompatActivity {
         intent.setAction(ACTION_MAIN);
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("requestCode", CREATE_PLANNED_EXPENSE);
+        intent.putExtra("com.example.jonathon.agilebudgeting.CLOUD_DATA", useCloudData);
         startActivityForResult(intent, CREATE_PLANNED_EXPENSE);
     }
 
@@ -67,6 +73,7 @@ public class PlanActivity extends AppCompatActivity {
         intent.setAction(ACTION_MAIN);
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("requestCode", CREATE_DEPOSIT);
+        intent.putExtra("com.example.jonathon.agilebudgeting.CLOUD_DATA", useCloudData);
         startActivityForResult(intent, CREATE_DEPOSIT);
     }
 
@@ -76,6 +83,7 @@ public class PlanActivity extends AppCompatActivity {
         intent.setAction(ACTION_MAIN);
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("requestCode", CREATE_ACTUAL_EXPENSE);
+        intent.putExtra("com.example.jonathon.agilebudgeting.CLOUD_DATA", useCloudData);
         startActivityForResult(intent, CREATE_ACTUAL_EXPENSE);
     }
 
@@ -85,6 +93,7 @@ public class PlanActivity extends AppCompatActivity {
         intent.setAction(ACTION_MAIN);
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("com.example.jonathon.agilebudgeting.LIST_TYPE", "PlannedItem");
+        intent.putExtra("com.example.jonathon.agilebudgeting.CLOUD_DATA", useCloudData);
         startActivity(intent);
     }
 
@@ -94,6 +103,7 @@ public class PlanActivity extends AppCompatActivity {
         intent.setAction(ACTION_MAIN);
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("com.example.jonathon.agilebudgeting.LIST_TYPE", "Deposit");
+        intent.putExtra("com.example.jonathon.agilebudgeting.CLOUD_DATA", useCloudData);
         startActivity(intent);
     }
 
@@ -103,6 +113,7 @@ public class PlanActivity extends AppCompatActivity {
         intent.setAction(ACTION_MAIN);
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("com.example.jonathon.agilebudgeting.LIST_TYPE", "ActualItem");
+        intent.putExtra("com.example.jonathon.agilebudgeting.CLOUD_DATA", useCloudData);
         startActivity(intent);
     }
 

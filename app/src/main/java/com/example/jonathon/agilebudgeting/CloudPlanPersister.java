@@ -37,6 +37,7 @@ public class CloudPlanPersister implements IPersistPlan, Serializable {
     @Override
     public Plan populate(Plan newPlan, PlanningPeriod period) {
         newPlan.setPeriod(period);
+        newPlan.setStoredInCloud(true);
         JSONObject getPlanObject = new JSONObject();
         try {
             getPlanObject.put("persistenceType", "loadPlan");

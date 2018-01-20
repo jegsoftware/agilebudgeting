@@ -153,13 +153,20 @@ public class EditActualExpenseActivity extends AppCompatActivity {
         EditText acctField = (EditText) findViewById(R.id.actualExpenseAccountField);
         String acct = acctField.getText().toString();
 
+        IPersistItem persister;
+        if (plan.isStoredInCloud()) {
+            persister = new CloudItemPersister();
+        } else {
+            persister = new DBItemPersister();
+        }
+
         if (null == item) {
             if (CREATE_PLANNED_EXPENSE == requestCode) {
-                item = Item.createPlannedItem(plan.getPeriod(), desc, amount, acct, new DBItemPersister());
+                item = Item.createPlannedItem(plan.getPeriod(), desc, amount, acct, persister);
             } else if (CREATE_DEPOSIT == requestCode) {
-                item = Item.createDeposit(plan.getPeriod(), date, desc, amount, acct, new DBItemPersister());
+                item = Item.createDeposit(plan.getPeriod(), date, desc, amount, acct, persister);
             } else if (CREATE_ACTUAL_EXPENSE == requestCode) {
-                item = Item.createActualItem(plan.getPeriod(), date, desc, amount, acct, new DBItemPersister());
+                item = Item.createActualItem(plan.getPeriod(), date, desc, amount, acct, persister);
             }
         }
         else {
