@@ -13,7 +13,7 @@ import java.util.GregorianCalendar;
 
 import static android.content.Intent.ACTION_MAIN;
 
-public class PlanActivity extends AppCompatActivity {
+public class PlanActivity extends AppCompatActivity implements IDataCallback<Plan> {
 
     private static final int CREATE_PLANNED_EXPENSE = 0;
     private static final int CREATE_DEPOSIT = 1;
@@ -21,6 +21,8 @@ public class PlanActivity extends AppCompatActivity {
     private Boolean useCloudData;
     private Plan plan;
     private String planDate;
+    private PlanPersisterFragment persisterFragment;
+    private PlanningPeriod selectedPeriod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,31 +32,19 @@ public class PlanActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String action = intent.getAction();
         if (action.equals(ACTION_MAIN)) {
-            PlanningPeriod selectedPeriod = (PlanningPeriod) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN_PERIOD");
             useCloudData = intent.getBooleanExtra("com.example.jonathon.agilebudgeting.CLOUD_DATA", false);
-            if (useCloudData) {
-                plan = Plan.createPlan(selectedPeriod, new CloudPlanPersister());
-            } else {
-                plan = Plan.createPlan(selectedPeriod, new DBPlanPersister());
-            }
+            persisterFragment = PlanPersisterFragment.getInstance(getFragmentManager(), useCloudData);
+            selectedPeriod = (PlanningPeriod) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN_PERIOD");
         } else {
             // we should never get here
             throw new IllegalStateException("Started plan activity with action other than ACTION_MAIN");
         }
 
-        EditText planBeginDateField = (EditText) findViewById(R.id.periodBeginDate);
-        planDate = plan.getPlanStartDate();
-        planBeginDateField.setText(planDate);
+    }
 
-        if (plan.isPlanningClosed()) {
-            disablePlanning();
-        }
-
-        if (plan.isActualsClosed()) {
-            disableActuals();
-        }
-
-        updateTotals();
+    public void onResume() {
+        super.onResume();
+        persisterFragment.loadPlan(selectedPeriod);
     }
 
     public void addPlannedExpense(View view) {
@@ -203,4 +193,27 @@ public class PlanActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void dataLoaded(Plan result) {
+        plan = result;
+
+        EditText planBeginDateField = (EditText) findViewById(R.id.periodBeginDate);
+        planDate = plan.getPlanStartDate();
+        planBeginDateField.setText(planDate);
+
+        if (plan.isPlanningClosed()) {
+            disablePlanning();
+        }
+
+        if (plan.isActualsClosed()) {
+            disableActuals();
+        }
+
+        updateTotals();
+    }
+
+    @Override
+    public void dataSaved(Plan result) {
+        dataLoaded(result);
+    }
 }
