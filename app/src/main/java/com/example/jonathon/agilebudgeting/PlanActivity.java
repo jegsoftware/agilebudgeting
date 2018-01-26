@@ -156,16 +156,19 @@ public class PlanActivity extends AppCompatActivity implements IDataCallback<Pla
                 planBeginDateField.setText(planDate);
             }
         }
+        persisterFragment.savePlan(plan);
     }
 
     public void closePlanning(View view) {
         plan.closePlanning();
+        persisterFragment.savePlan(plan);
 
         disablePlanning();
     }
 
     public void closeActuals(View view) {
         plan.closeActuals();
+        persisterFragment.savePlan(plan);
 
         disableActuals();
     }

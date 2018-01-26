@@ -20,7 +20,6 @@ public class Plan implements Serializable {
     private ArrayList<Item> deposits;
     private PlanningPeriod planId;
     private ArrayList<Item> actualItems;
-    private IPersistPlan persister;
     private boolean initializing;
     private boolean isStoredInCloud;
 
@@ -39,7 +38,6 @@ public class Plan implements Serializable {
 
     public static Plan createPlan(PlanningPeriod planPeriod, IPersistPlan persister) {
         Plan newPlan = new Plan();
-        newPlan.persister = persister;
         persister.populate(newPlan, planPeriod);
         newPlan.initializing = false;
         return newPlan;
@@ -58,18 +56,15 @@ public class Plan implements Serializable {
 
     public void setPeriod (PlanningPeriod per) {
         period = per;
-        persist();
     }
 
     public void setPeriod (Calendar planDate) {
         period = new PlanningPeriod(planDate);
-        persist();
     }
 
     public void setPeriod (String planDate) throws ParseException {
         period = new PlanningPeriod();
         period.setDate(planDate);
-        persist();
     }
 
     public PlanningPeriod getPeriod () {
@@ -78,37 +73,30 @@ public class Plan implements Serializable {
 
     public void openPlanning() {
         planningStatus = PlanStatus.OPEN;
-        persist();
     }
 
     public void closePlanning() {
         planningStatus = PlanStatus.CLOSED;
-        persist();
     }
 
     public void openActuals() {
         actualsStatus = PlanStatus.OPEN;
-        persist();
     }
 
     public void closeActuals() {
         actualsStatus = PlanStatus.CLOSED;
-        persist();
     }
 
     public void addPlannedItem(Item item) {
         plannedItems.add(item);
-        persist();
     }
 
     public void addDeposit(Item dep) {
         deposits.add(dep);
-        persist();
     }
 
     public void addActualItem(Item actualItem) {
         actualItems.add(actualItem);
-        persist();
     }
 
     public double getTotalPlannedExpenses() {
@@ -141,13 +129,6 @@ public class Plan implements Serializable {
     }
 
     public double getNetActualAmount() { return getTotalPlannedExpenses() - getTotalActualExpenses(); }
-
-    private void persist() {
-        if (initializing) return;
-
-        persister.persist(this);
-        return;
-    }
 
     public ArrayList<Item> getDeposits() {
         return deposits;
