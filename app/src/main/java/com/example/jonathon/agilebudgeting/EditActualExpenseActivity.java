@@ -11,7 +11,7 @@ import android.widget.TextView;
 import static android.content.Intent.ACTION_EDIT;
 import static android.content.Intent.ACTION_MAIN;
 
-public class EditActualExpenseActivity extends AppCompatActivity {
+public class EditActualExpenseActivity extends AppCompatActivity implements IDataCallback<Item> {
 
     private static final int CREATE_PLANNED_EXPENSE = 0;
     private static final int CREATE_DEPOSIT = 1;
@@ -23,6 +23,13 @@ public class EditActualExpenseActivity extends AppCompatActivity {
     private Plan plan;
     private Item item;
     private int requestCode;
+    private ItemPersisterFragment persisterFragment;
+    private ExitPath exitPath;
+
+    private enum ExitPath {
+        RETURN,
+        MATCH
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +78,7 @@ public class EditActualExpenseActivity extends AppCompatActivity {
             item = (Item) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
             populateFields();
         }
+        persisterFragment = ItemPersisterFragment.getInstance(getFragmentManager(), plan.isStoredInCloud());
 
     }
 
@@ -113,20 +121,13 @@ public class EditActualExpenseActivity extends AppCompatActivity {
 
     public void saveUnplannedActualExpense(View view) {
         saveExpense();
-        returnToCaller();
+        exitPath = ExitPath.RETURN;
     }
 
     public void findMatchingPlannedExpenseForItem(View view) {
 
         saveExpense();
-
-        Intent intent = new Intent(this, MatchActualToPlan.class);
-        intent.setAction(ACTION_MAIN);
-        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
-        intent.putExtra("com.example.jonathon.agilebudgeting.ACTUAL_ITEM", item);
-
-        startActivityForResult(intent, MATCH_ACTUAL_PLANNED);
-
+        exitPath = ExitPath.MATCH;
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
@@ -175,7 +176,34 @@ public class EditActualExpenseActivity extends AppCompatActivity {
             item.setAmount(amount);
             item.setAccount(acct);
         }
-        item.persist();
+        persisterFragment.saveItem(item);
+        disableFields();
+    }
+
+    private void disableFields() {
+        EditText dateField = (EditText) findViewById(R.id.actualExpenseDateField);
+        dateField.setEnabled(false);
+
+        EditText descField = (EditText) findViewById(R.id.actualExpenseDescriptionField);
+        descField.setEnabled(false);
+
+        EditText amountField = (EditText) findViewById(R.id.actualExpenseAmountField);
+        amountField.setEnabled(false);
+
+        EditText acctField = (EditText) findViewById(R.id.actualExpenseAccountField);
+        acctField.setEnabled(false);
+
+        Button matchButton = (Button) findViewById(R.id.actualExpenseMatchButton);
+        matchButton.setEnabled(false);
+
+        Button saveButton = (Button) findViewById(R.id.actualExpenseUnplannedButton);
+        saveButton.setEnabled(false);
+
+        Button clearButton = (Button) findViewById(R.id.actualExpenseClearButton);
+        clearButton.setEnabled(false);
+
+        Button backButton = (Button) findViewById(R.id.actualExpenseBackButton);
+        backButton.setEnabled(false);
     }
 
     private void returnToCaller() {
@@ -184,6 +212,25 @@ public class EditActualExpenseActivity extends AppCompatActivity {
         returnIntent.putExtra("com.example.jonathon.agilebudgeting.ITEM", item);
         setResult(RESULT_OK, returnIntent);
         finish();
+    }
+
+    @Override
+    public void dataLoaded(Item result) {
+
+    }
+
+    @Override
+    public void dataSaved(Item result) {
+        if (ExitPath.MATCH == exitPath) {
+            Intent intent = new Intent(this, MatchActualToPlan.class);
+            intent.setAction(ACTION_MAIN);
+            intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
+            intent.putExtra("com.example.jonathon.agilebudgeting.ACTUAL_ITEM", item);
+
+            startActivityForResult(intent, MATCH_ACTUAL_PLANNED);
+        } else {
+            returnToCaller();
+        }
     }
 
 }

@@ -40,7 +40,7 @@ public class Item implements Serializable {
         newItem.persister = persister;
         newItem.type = type;
         newItem.itemId = UUID.randomUUID();
-        persister.persist(newItem);
+        //persister.persist(newItem);
 
         return newItem;
     }
@@ -73,8 +73,10 @@ public class Item implements Serializable {
 
     private static void populateRelatedItems(Item item) {
         UUID[] itemIds = item.persister.retrieveRelatedItems(item);
-        for (int i = 0; i < itemIds.length; i++) {
-            item.relatedItems.add(Item.createItem(itemIds[i],item.persister));
+        if (itemIds != null) {
+            for (int i = 0; i < itemIds.length; i++) {
+                item.relatedItems.add(Item.createItem(itemIds[i], item.persister));
+            }
         }
     }
 

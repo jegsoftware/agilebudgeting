@@ -31,6 +31,7 @@ public class PlanActivity extends AppCompatActivity implements IDataCallback<Pla
 
         Intent intent = getIntent();
         String action = intent.getAction();
+        plan = null;
         if (action.equals(ACTION_MAIN)) {
             useCloudData = intent.getBooleanExtra("com.example.jonathon.agilebudgeting.CLOUD_DATA", false);
             persisterFragment = PlanPersisterFragment.getInstance(getFragmentManager(), useCloudData);
@@ -44,7 +45,9 @@ public class PlanActivity extends AppCompatActivity implements IDataCallback<Pla
 
     public void onResume() {
         super.onResume();
-        persisterFragment.loadPlan(selectedPeriod);
+        if (null == plan) {
+            persisterFragment.loadPlan(selectedPeriod);
+        }
     }
 
     public void addPlannedExpense(View view) {
