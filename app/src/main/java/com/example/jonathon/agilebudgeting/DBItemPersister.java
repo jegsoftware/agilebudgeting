@@ -87,7 +87,6 @@ public class DBItemPersister implements IPersistItem, Serializable {
         newItem.setAccount(acct);
         newItem.setPlanPeriod(new PlanningPeriod(perNum, perYear));
         newItem.itemId = itemId;
-        newItem.persister = this;
         return newItem;
     }
 

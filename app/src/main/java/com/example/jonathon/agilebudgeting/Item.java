@@ -16,7 +16,6 @@ public class Item implements Serializable {
     protected UUID itemId;
     protected PlanningPeriod planPeriod;
     protected String date;
-    protected IPersistItem persister;
     protected String type;
     protected ArrayList<Item> relatedItems;
 
@@ -37,10 +36,8 @@ public class Item implements Serializable {
         newItem.setAmount(amt);
         newItem.setAccount(acct);
         newItem.setDate(date);
-        newItem.persister = persister;
         newItem.type = type;
         newItem.itemId = UUID.randomUUID();
-        //persister.persist(newItem);
 
         return newItem;
     }
@@ -48,7 +45,6 @@ public class Item implements Serializable {
     public static Item createItem(UUID itemID, IPersistItem persister) {
         Item retrievedItem = persister.retrieve(itemID);
 
-        retrievedItem.persister = persister;
         return retrievedItem;
     }
 
@@ -66,16 +62,16 @@ public class Item implements Serializable {
 
     public static Item createActualItem(UUID itemID, IPersistItem persister) {
         Item retrievedItem = persister.retrieve(itemID);
-        populateRelatedItems(retrievedItem);
+        populateRelatedItems(retrievedItem, persister);
 
         return retrievedItem;
     }
 
-    private static void populateRelatedItems(Item item) {
-        UUID[] itemIds = item.persister.retrieveRelatedItems(item);
+    private static void populateRelatedItems(Item item,IPersistItem persister) {
+        UUID[] itemIds = persister.retrieveRelatedItems(item);
         if (itemIds != null) {
             for (int i = 0; i < itemIds.length; i++) {
-                item.relatedItems.add(Item.createItem(itemIds[i], item.persister));
+                item.relatedItems.add(Item.createItem(itemIds[i], persister));
             }
         }
     }
@@ -133,25 +129,15 @@ public class Item implements Serializable {
         return type;
     }
 
-    public void persist() {
-        persister.persist(this);
-    }
-
     public void addRelatedItem(Item plannedItem) {
         if ((null != plannedItem) && !isMatchedTo(plannedItem)) {
             relatedItems.add(plannedItem);
-            plannedItem.addRelatedItem(this);
-            saveRelationship(plannedItem);
         }
     }
 
     private boolean isMatchedTo(Item plannedItem) {
         if (relatedItems.contains(plannedItem)) return true;
         return hasMatch(plannedItem);
-    }
-
-    private void saveRelationship(Item plannedItem) {
-        persister.persistRelationship(this, plannedItem);
     }
 
     public boolean hasMatch(Item item) {

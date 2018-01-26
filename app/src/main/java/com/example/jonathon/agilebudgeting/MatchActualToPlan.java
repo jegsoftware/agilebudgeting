@@ -8,14 +8,17 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.UUID;
 
 public class MatchActualToPlan extends AppCompatActivity {
 
     private Plan plan;
     private Item actualItem;
+    private ArrayList<Item> possibleMatches;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +35,8 @@ public class MatchActualToPlan extends AppCompatActivity {
     }
 
     private void populateList() {
-        List<Item> possibleMatches = plan.getPlannedItemsForAccount(actualItem.getAccount());
-        Iterator<Item> iter = possibleMatches.iterator();
+        possibleMatches = plan.getPlannedItemsForAccount(actualItem.getAccount());
+        ListIterator<Item> iter = possibleMatches.listIterator();
 
         LinearLayout listView = (LinearLayout) findViewById(R.id.matchingItemsList);
 
@@ -41,6 +44,7 @@ public class MatchActualToPlan extends AppCompatActivity {
             LinearLayout itemView = new LinearLayout(listView.getContext());
             itemView.setOrientation(LinearLayout.HORIZONTAL);
 
+            int index = iter.nextIndex();
             Item curItem = iter.next();
 
             String itemText = curItem.getDescription() + " $" + curItem.getAmountString() + " " + curItem.getAccount();
@@ -49,7 +53,7 @@ public class MatchActualToPlan extends AppCompatActivity {
             checkBox.setChecked(actualItem.hasMatch(curItem));
 
             TextView itemId = new TextView(itemView.getContext());
-            itemId.setText(curItem.getItemId().toString());
+            itemId.setText(Integer.toString(index));
             itemId.setVisibility(View.GONE);
 
             itemView.addView(checkBox, 0);
@@ -69,10 +73,14 @@ public class MatchActualToPlan extends AppCompatActivity {
             CheckBox checkBox = (CheckBox) itemView.getChildAt(0);
             if(checkBox.isChecked()) {
                 TextView itemIdText = (TextView) itemView.getChildAt(1);
-                UUID plannedItemId = UUID.fromString(itemIdText.getText().toString());
-                Item plannedItem = Item.createItem(plannedItemId, new DBItemPersister());
+                int plannedItemIndex = Integer.valueOf(itemIdText.getText().toString());
+                Item plannedItem = possibleMatches.get(plannedItemIndex);
 
                 actualItem.addRelatedItem(plannedItem);
+                plannedItem.addRelatedItem(actualItem);
+                // TODO: save the relationship between the two.
+                //persister.persistRelationship(actualItem, plannedItem);
+
             }
         }
 

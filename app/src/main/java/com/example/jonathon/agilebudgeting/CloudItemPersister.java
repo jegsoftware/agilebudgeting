@@ -73,7 +73,6 @@ public class CloudItemPersister implements IPersistItem, Serializable {
                 retrievedItem.amount = retrievedJSON.getDouble("amount");
                 retrievedItem.date = retrievedJSON.getString("date");
                 retrievedItem.itemId = itemId;
-                retrievedItem.persister = this;
             }
 
         } catch (JSONException e) {
