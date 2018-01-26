@@ -92,11 +92,9 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void backToPlan(View view) {
-        Intent intent = new Intent(this, PlanActivity.class);
-        intent.setAction(ACTION_MAIN);
-
-        intent.putExtra("com.example.jonathon.agilebudgeting.PLAN_PERIOD", plan.getPeriod());
-        startActivity(intent);
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
+        finish();
     }
 
     @Override
@@ -107,21 +105,19 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         int requestCode;
 
         if ("PlannedItem".equals(listType)) {
-            intent = new Intent(this, EditActualExpenseActivity.class);
             requestCode = EDIT_PLANNED_ITEM;
         }
         else if ("Deposit".equals(listType)) {
-            intent = new Intent(this, EditActualExpenseActivity.class);
             requestCode = EDIT_DEPOSIT;
         }
         else if ("ActualItem".equals(listType)) {
-            intent = new Intent(this, EditActualExpenseActivity.class);
             requestCode = EDIT_ACTUAL_ITEM;
         }
         else {
             return;
         }
 
+        intent = new Intent(this, EditActualExpenseActivity.class);
         intent.setAction(ACTION_EDIT);
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("com.example.jonathon.agilebudgeting.ITEM", clickedItem);
