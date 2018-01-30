@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,11 +15,12 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
 
-public class MatchActualToPlan extends AppCompatActivity {
+public class MatchActualToPlan extends AppCompatActivity implements IDataCallback<Item> {
 
     private Plan plan;
     private Item actualItem;
     private ArrayList<Item> possibleMatches;
+    private RelationshipPersisterFragment persisterFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,7 @@ public class MatchActualToPlan extends AppCompatActivity {
         plan = (Plan) intent.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN");
 
         populateList();
-
+        persisterFragment = RelationshipPersisterFragment.getInstance(getFragmentManager(), plan.isStoredInCloud());
     }
 
     private void populateList() {
@@ -67,6 +69,7 @@ public class MatchActualToPlan extends AppCompatActivity {
     public void saveMatches(View view) {
         // TODO: Support unchecking a previously saved match
         LinearLayout listView = (LinearLayout) findViewById(R.id.matchingItemsList);
+        ArrayList<Item> matchedItems = new ArrayList<>();
         int itemCount = listView.getChildCount();
         for (int i=0; i < itemCount; i++) {
             LinearLayout itemView = (LinearLayout) listView.getChildAt(i);
@@ -75,18 +78,37 @@ public class MatchActualToPlan extends AppCompatActivity {
                 TextView itemIdText = (TextView) itemView.getChildAt(1);
                 int plannedItemIndex = Integer.valueOf(itemIdText.getText().toString());
                 Item plannedItem = possibleMatches.get(plannedItemIndex);
-
-                actualItem.addRelatedItem(plannedItem);
-                plannedItem.addRelatedItem(actualItem);
-                // TODO: save the relationship between the two.
-                //persister.persistRelationship(actualItem, plannedItem);
-
+                matchedItems.add(plannedItem);
             }
         }
+        persisterFragment.saveRelationships(actualItem, matchedItems);
+        disableFields();
+    }
 
+    private void disableFields() {
+        LinearLayout listView = (LinearLayout) findViewById(R.id.matchingItemsList);
+        int itemCount = listView.getChildCount();
+        for (int i=0; i < itemCount; i++) {
+            LinearLayout itemView = (LinearLayout) listView.getChildAt(i);
+            CheckBox checkBox = (CheckBox) itemView.getChildAt(0);
+            checkBox.setEnabled(false);
+        }
+        Button saveMatchesButton = (Button) findViewById(R.id.saveMatchesButton);
+        saveMatchesButton.setEnabled(false);
+    }
+
+    @Override
+    public void dataLoaded(Item result) {
+
+    }
+
+    @Override
+    public void dataSaved(Item result) {
+        actualItem = result;
         Intent returnIntent = new Intent();
 
         setResult(RESULT_OK, returnIntent);
         finish();
+
     }
 }
