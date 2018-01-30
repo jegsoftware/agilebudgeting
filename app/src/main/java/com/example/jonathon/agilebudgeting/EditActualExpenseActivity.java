@@ -135,6 +135,7 @@ public class EditActualExpenseActivity extends AppCompatActivity implements IDat
 
         if (requestCode == MATCH_ACTUAL_PLANNED) {
             if (resultCode == RESULT_OK) {
+                item = (Item) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
                 returnToCaller();
             }
         }

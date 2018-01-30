@@ -176,5 +176,22 @@ public class Plan implements Serializable {
         return accountItems;
     }
 
+    public void updateItem(Item editedItem) {
+        ArrayList<Item> itemList;
+        switch (editedItem.getType()) {
+            case "PlannedItem" : itemList = plannedItems; break;
+            case "ActualItem" : itemList = actualItems; break;
+            case "Deposit" : itemList = deposits; break;
+            default: itemList = new ArrayList();
+        }
+
+        for (int i = 0; i < itemList.size(); i++) {
+            Item curItem = itemList.get(i);
+            if (curItem.getItemId().equals(editedItem.getItemId())) {
+                itemList.set(i, editedItem);
+                break;
+            }
+        }
+    }
 }
 

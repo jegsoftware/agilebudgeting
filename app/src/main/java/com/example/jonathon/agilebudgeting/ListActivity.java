@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.UUID;
 
 import static android.content.Intent.ACTION_EDIT;
 import static android.content.Intent.ACTION_MAIN;
@@ -128,23 +129,15 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
 
-        LinearLayout listView = (LinearLayout) findViewById(R.id.itemList);
-        listView.removeAllViews();
-        populateList();
+        if (resultCode == RESULT_OK) {
+            Item editedItem = (Item) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
+            plan.updateItem(editedItem);
 
-/*      TODO: Figure out a way to update just the changed item.  Until I do, new values won't show until you leave and return to the list.
-        long itemId = data.getLongExtra("com.example.jonathon.agilebudgeting.ITEM_ID",-1);
-        Item editedItem;
+            LinearLayout listView = (LinearLayout) findViewById(R.id.itemList);
+            listView.removeAllViews();
+            populateList();
 
-        if (requestCode == EDIT_PLANNED_ITEM) {
-            if (resultCode == RESULT_OK) {
-            }
         }
-        else if (requestCode == EDIT_DEPOSIT) {
-            if (resultCode == RESULT_OK) {
-            }
-        }
-         */
 
     }
 

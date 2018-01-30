@@ -107,6 +107,8 @@ public class MatchActualToPlan extends AppCompatActivity implements IDataCallbac
         actualItem = result;
         Intent returnIntent = new Intent();
 
+        returnIntent.putExtra("com.example.jonathon.agilebudgeting.ITEM", actualItem);
+
         setResult(RESULT_OK, returnIntent);
         finish();
 
