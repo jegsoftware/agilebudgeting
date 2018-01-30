@@ -14,7 +14,7 @@ import java.util.UUID;
  */
 
 public class ItemPersisterFragment extends Fragment {
-    public static final String TAG = "PlanPersisterFragment";
+    public static final String TAG = "ItemPersisterFragment";
 
     private IDataCallback<Item> callback;
     private Boolean useCloudData;
