@@ -18,6 +18,7 @@ public class PlanActivity extends AppCompatActivity implements IDataCallback<Pla
     private static final int CREATE_PLANNED_EXPENSE = 0;
     private static final int CREATE_DEPOSIT = 1;
     private static final int CREATE_ACTUAL_EXPENSE = 2;
+    private static final int VIEW_LIST = 3;
     private Boolean useCloudData;
     private Plan plan;
     private String planDate;
@@ -87,7 +88,7 @@ public class PlanActivity extends AppCompatActivity implements IDataCallback<Pla
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("com.example.jonathon.agilebudgeting.LIST_TYPE", "PlannedItem");
         intent.putExtra("com.example.jonathon.agilebudgeting.CLOUD_DATA", useCloudData);
-        startActivity(intent);
+        startActivityForResult(intent, VIEW_LIST);
     }
 
     public void viewDeposits(View view) {
@@ -97,7 +98,7 @@ public class PlanActivity extends AppCompatActivity implements IDataCallback<Pla
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("com.example.jonathon.agilebudgeting.LIST_TYPE", "Deposit");
         intent.putExtra("com.example.jonathon.agilebudgeting.CLOUD_DATA", useCloudData);
-        startActivity(intent);
+        startActivityForResult(intent, VIEW_LIST);
     }
 
     public void viewActualExpenses(View view) {
@@ -107,24 +108,30 @@ public class PlanActivity extends AppCompatActivity implements IDataCallback<Pla
         intent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         intent.putExtra("com.example.jonathon.agilebudgeting.LIST_TYPE", "ActualItem");
         intent.putExtra("com.example.jonathon.agilebudgeting.CLOUD_DATA", useCloudData);
-        startActivity(intent);
+        startActivityForResult(intent, VIEW_LIST);
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
 
         if (resultCode == RESULT_OK) {
-            Item item = (Item) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
             if (requestCode == CREATE_PLANNED_EXPENSE) {
+                Item item = (Item) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
                 plan.addPlannedItem(item);
                 updateTotals();
             }
             else if (requestCode == CREATE_DEPOSIT) {
+                Item item = (Item) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
                 plan.addDeposit(item);
                 updateTotals();
             }
             else if (requestCode == CREATE_ACTUAL_EXPENSE) {
+                Item item = (Item) data.getSerializableExtra("com.example.jonathon.agilebudgeting.ITEM");
                 plan.addActualItem(item);
+                updateTotals();
+            }
+            else if (requestCode == VIEW_LIST) {
+                plan = (Plan) data.getSerializableExtra("com.example.jonathon.agilebudgeting.PLAN");
                 updateTotals();
             }
         }

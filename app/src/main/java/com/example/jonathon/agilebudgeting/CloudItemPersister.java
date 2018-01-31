@@ -28,6 +28,13 @@ public class CloudItemPersister implements IPersistItem, Serializable {
             dataObject.put("amount", item.getAmountString());
             dataObject.put("account", item.getAccount());
             dataObject.put("type", item.getType());
+            if (item.relatedItems.size() > 0) {
+                JSONArray relatedItems = new JSONArray();
+                for (int i = 0; i < item.relatedItems.size(); i++) {
+                    relatedItems.put(i, item.relatedItems.get(i).getItemId().toString());
+                }
+                dataObject.put("relatedItems", relatedItems);
+            }
 
             saveItemObject.put("data", dataObject);
             CloudCaller.sendJSON(saveItemObject);

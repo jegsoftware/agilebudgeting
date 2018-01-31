@@ -94,6 +94,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
 
     public void backToPlan(View view) {
         Intent returnIntent = new Intent();
+        returnIntent.putExtra("com.example.jonathon.agilebudgeting.PLAN", plan);
         setResult(RESULT_OK, returnIntent);
         finish();
     }
