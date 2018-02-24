@@ -25,7 +25,7 @@ public class CloudItemPersisterTest {
                                     42.00,
                                     "Checking",
                                     persister);
-        testActual.persist();
+        persister.persist(testActual);
         assertTrue(true);
     }
 
@@ -37,7 +37,7 @@ public class CloudItemPersisterTest {
                                     100.00,
                                     "Checking",
                                     persister);
-        testPlanned.persist();
+        persister.persist(testPlanned);
         Item testActual1 = Item.createActualItem(
                                     new PlanningPeriod(20, 2017),
                                     "10/20/2017",
@@ -45,7 +45,7 @@ public class CloudItemPersisterTest {
                                     50.00,
                                     "Checking",
                                     persister);
-        testActual1.persist();
+        persister.persist(testActual1);
         Item testActual2 = Item.createActualItem(
                                     new PlanningPeriod(20, 2017),
                                     "10/20/2017",
@@ -53,7 +53,7 @@ public class CloudItemPersisterTest {
                                     50.00,
                                     "Checking",
                                     persister);
-        testActual2.persist();
+        persister.persist(testActual2);
         testActual1.addRelatedItem(testPlanned);
         testActual2.addRelatedItem(testPlanned);
     }
